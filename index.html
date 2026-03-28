@@ -3,20 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>T-Rex</title>
+<title>T-Rex Leerspel</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div id="menu">
   <h1>🦖 T-Rex Leerspel</h1>
-  <button id="btnClick">Klik-spel</button>
-  <button id="btnRunner">Runner</button>
+  <button id="btnClick">Klik-spel (rustig leren)</button>
+  <button id="btnRunner">Dino Runner (actie)</button>
 </div>
 
 <div id="game" class="hidden">
   <img id="trex" src="assets/trex.png">
   <div id="letters"></div>
+  <div id="obstacles"></div>
+  <div id="ground"></div>
+
+  <div id="target">
+    <img id="wordImage">
+  </div>
+
+  <div id="progress"></div>
+  <div id="score">Score: 0</div>
 </div>
 
 <script src="script.js"></script>
