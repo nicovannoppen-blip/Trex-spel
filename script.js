@@ -1,3 +1,6 @@
+document.addEventListener("DOMContentLoaded", () => {
+  window.startMode = startMode;
+});
 const menu = document.getElementById("menu");
 const game = document.getElementById("game");
 const trex = document.getElementById("trex");
