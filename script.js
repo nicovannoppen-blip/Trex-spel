@@ -8,6 +8,7 @@ const progressEl = document.getElementById("progress");
 const scoreEl = document.getElementById("score");
 
 let mode = "click";
+
 let words = [
   {word:"kat", img:"assets/kat.png"},
   {word:"vis", img:"assets/vis.png"},
@@ -18,13 +19,14 @@ let current = 0;
 let index = 0;
 let score = 0;
 
-// physics (runner)
+// physics
 let velocity = 6;
 let gravity = 1;
 let jump = -15;
 let y = 0;
 let vy = 0;
 let grounded = true;
+
 function startMode(selected){
   mode = selected;
   menu.classList.add("hidden");
@@ -94,3 +96,85 @@ function handleLetter(el, letter){
   scoreEl.innerText = "Score: " + score;
 }
 
+function nextWord(){
+  current++;
+  if(current >= words.length){
+    alert("Gewonnen!");
+    location.reload();
+  } else {
+    startLevel();
+  }
+}
+
+function updateProgress(){
+  let word = words[current].word;
+  progressEl.innerText = word.slice(0,index) + "_".repeat(word.length-index);
+}
+
+// RUNNER
+function loop(){
+  requestAnimationFrame(loop);
+
+  vy += gravity;
+  y += vy;
+
+  if(y > 0){ y = 0; vy = 0; grounded = true; }
+
+  trex.style.bottom = (50 - y) + "px";
+
+  moveObjects(lettersDiv.children);
+  moveObjects(obstaclesDiv.children);
+
+  if(Math.random() < 0.02){
+    spawnObstacle();
+  }
+
+  checkCollisions();
+}
+
+function moveObjects(list){
+  for(let el of list){
+    let x = parseInt(el.style.left);
+    x -= velocity;
+    el.style.left = x + "px";
+    if(x < -50) el.remove();
+  }
+}
+
+function spawnObstacle(){
+  let el = document.createElement("div");
+  el.className = "obstacle";
+  el.style.left = window.innerWidth + "px";
+  obstaclesDiv.appendChild(el);
+}
+
+function checkCollisions(){
+  let trexRect = trex.getBoundingClientRect();
+
+  document.querySelectorAll(".letter").forEach(el=>{
+    if(overlap(trexRect, el.getBoundingClientRect())){
+      handleLetter(el, el.innerText);
+    }
+  });
+
+  document.querySelectorAll(".obstacle").forEach(el=>{
+    if(overlap(trexRect, el.getBoundingClientRect())){
+      alert("Game Over");
+      location.reload();
+    }
+  });
+}
+
+function overlap(a,b){
+  return !(a.right < b.left || a.left > b.right || a.bottom < b.top || a.top > b.bottom);
+}
+
+function jumpAction(){
+  if(mode === "runner" && grounded){
+    vy = jump;
+    grounded = false;
+  }
+}
+
+document.addEventListener("click", jumpAction);
+document.addEventListener("touchstart", jumpAction);
