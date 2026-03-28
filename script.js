@@ -1,66 +1,96 @@
+const menu = document.getElementById("menu");
+const game = document.getElementById("game");
 const trex = document.getElementById("trex");
 const lettersDiv = document.getElementById("letters");
+const obstaclesDiv = document.getElementById("obstacles");
 const wordImage = document.getElementById("wordImage");
-const message = document.getElementById("message");
+const progressEl = document.getElementById("progress");
+const scoreEl = document.getElementById("score");
 
+let mode = "click";
 let words = [
-    {word:"kat", img:"assets/kat.png"},
-    {word:"vis", img:"assets/vis.png"},
-    {word:"boom", img:"assets/boom.png"}
+  {word:"kat", img:"assets/kat.png"},
+  {word:"vis", img:"assets/vis.png"},
+  {word:"boom", img:"assets/boom.png"}
 ];
 
 let current = 0;
 let index = 0;
+let score = 0;
+
+// physics (runner)
+let velocity = 6;
+let gravity = 1;
+let jump = -15;
+let y = 0;
+let vy = 0;
+let grounded = true;
+function startMode(selected){
+  mode = selected;
+  menu.classList.add("hidden");
+  game.classList.remove("hidden");
+  startLevel();
+  if(mode === "runner") loop();
+}
 
 function startLevel(){
-    lettersDiv.innerHTML="";
-    message.innerText="";
-    index = 0;
+  lettersDiv.innerHTML = "";
+  obstaclesDiv.innerHTML = "";
+  index = 0;
 
-    let w = words[current];
-    wordImage.src = w.img;
+  let w = words[current];
+  wordImage.src = w.img;
+  updateProgress();
 
-    let shuffled = w.word.split('').sort(() => Math.random()-0.5);
-
-    shuffled.forEach(letter => {
-        let el = document.createElement("div");
-        el.className = "letter";
-        el.innerText = letter;
-
-        el.style.left = Math.random()*80 + "vw";
-        el.style.top = (Math.random()*70+10) + "vh";
-
-        el.onclick = () => eatLetter(el, letter);
-
-        lettersDiv.appendChild(el);
-    });
+  if(mode === "click"){
+    spawnClickLetters(w.word);
+  } else {
+    spawnRunnerLetters(w.word);
+  }
 }
 
-function eatLetter(el, letter){
-    let correct = words[current].word[index];
+function spawnClickLetters(word){
+  word.split('').sort(()=>Math.random()-0.5).forEach(letter=>{
+    let el = createLetter(letter);
+    el.style.left = Math.random()*80 + "vw";
+    el.style.top = Math.random()*70 + "vh";
+    el.onclick = ()=>handleLetter(el, letter);
+    lettersDiv.appendChild(el);
+  });
+}
 
-    if(letter === correct){
-        el.remove();
-        index++;
+function spawnRunnerLetters(word){
+  word.split('').forEach((letter,i)=>{
+    let el = createLetter(letter);
+    el.style.left = (600 + i*200) + "px";
+    el.style.bottom = "120px";
+    lettersDiv.appendChild(el);
+  });
+}
 
-        if(index === words[current].word.length){
-            message.innerText = "Goed gedaan! 🎉";
-            current++;
+function createLetter(letter){
+  let el = document.createElement("div");
+  el.className = "letter";
+  el.innerText = letter;
+  return el;
+}
 
-            if(current >= words.length){
-                message.innerText = "Alles klaar! 🦖";
-            } else {
-                setTimeout(startLevel, 1500);
-            }
-        }
-    } else {
-        message.innerText = "Foutje, probeer opnieuw!";
+function handleLetter(el, letter){
+  let correct = words[current].word[index];
+
+  if(letter === correct){
+    el.remove();
+    index++;
+    score += 10;
+    updateProgress();
+
+    if(index === words[current].word.length){
+      nextWord();
     }
+  } else {
+    score -= 5;
+  }
+
+  scoreEl.innerText = "Score: " + score;
 }
 
-document.addEventListener("click", (e)=>{
-    trex.style.left = e.clientX + "px";
-    trex.style.top = e.clientY + "px";
-});
-
-startLevel();
