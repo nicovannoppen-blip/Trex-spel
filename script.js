@@ -178,3 +178,4 @@ function jumpAction(){
 
 document.addEventListener("click", jumpAction);
 document.addEventListener("touchstart", jumpAction);
+window.startMode = startMode;
