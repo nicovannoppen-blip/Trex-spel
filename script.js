@@ -1,11 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-  // preload images
-  words.forEach(w => {
-    const img = new Image();
-    img.src = w.img;
-  });
-  
   const menu = document.getElementById("menu");
   const game = document.getElementById("game");
   const trex = document.getElementById("trex");
@@ -15,13 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const progressEl = document.getElementById("progress");
   const scoreEl = document.getElementById("score");
 
-  document.getElementById("btnClick").addEventListener("click", () => {
-    startMode("click");
-  });
-
-  document.getElementById("btnRunner").addEventListener("click", () => {
-    startMode("runner");
-  });
+  document.getElementById("btnClick").addEventListener("click", () => startMode("click"));
+  document.getElementById("btnRunner").addEventListener("click", () => startMode("runner"));
 
   let mode = "click";
 
@@ -30,6 +19,12 @@ document.addEventListener("DOMContentLoaded", () => {
     {word:"vis", img:"assets/vis.png"},
     {word:"boom", img:"assets/boom.png"}
   ];
+
+  // ===== Preload images =====
+  words.forEach(w => {
+    const img = new Image();
+    img.src = w.img;
+  });
 
   let current = 0;
   let index = 0;
@@ -48,10 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     menu.classList.add("hidden");
     game.classList.remove("hidden");
     startLevel();
-
-    if(mode === "runner"){
-      loop();
-    }
+    if(mode === "runner") loop();
   }
 
   function startLevel(){
@@ -59,11 +51,9 @@ document.addEventListener("DOMContentLoaded", () => {
     obstaclesDiv.innerHTML = "";
     index = 0;
 
-    let w = words[current];
+    const w = words[current];
     const img = new Image();
-    img.onload = () => {
-        wordImage.src = w.img;
-    };
+    img.onload = () => { wordImage.src = w.img; }; // set image when loaded
     img.src = w.img;
 
     updateProgress();
@@ -80,11 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
       let el = createLetter(letter);
       el.style.left = Math.random()*80 + "vw";
       el.style.top = Math.random()*70 + "vh";
-
-      el.addEventListener("click", () => {
-        handleLetter(el, letter);
-      });
-
+      el.addEventListener("click", () => handleLetter(el, letter));
       lettersDiv.appendChild(el);
     });
   }
@@ -113,10 +99,7 @@ document.addEventListener("DOMContentLoaded", () => {
       index++;
       score += 10;
       updateProgress();
-
-      if(index === words[current].word.length){
-        nextWord();
-      }
+      if(index === words[current].word.length) nextWord();
     } else {
       score -= 5;
     }
@@ -129,9 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if(current >= words.length){
       alert("Gewonnen!");
       location.reload();
-    } else {
-      startLevel();
-    }
+    } else startLevel();
   }
 
   function updateProgress(){
@@ -143,25 +124,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function loop(){
     requestAnimationFrame(loop);
-
     vy += gravity;
     y += vy;
-
     if(y > 0){
       y = 0;
       vy = 0;
       grounded = true;
     }
-
     trex.style.bottom = (50 - y) + "px";
 
     moveObjects(lettersDiv.children);
     moveObjects(obstaclesDiv.children);
 
-    if(Math.random() < 0.02){
-      spawnObstacle();
-    }
-
+    if(Math.random() < 0.02) spawnObstacle();
     checkCollisions();
   }
 
@@ -170,7 +145,6 @@ document.addEventListener("DOMContentLoaded", () => {
       let x = parseInt(el.style.left);
       x -= velocity;
       el.style.left = x + "px";
-
       if(x < -50) el.remove();
     }
   }
