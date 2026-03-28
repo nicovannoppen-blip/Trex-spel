@@ -1,5 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  // preload images
+  words.forEach(w => {
+    const img = new Image();
+    img.src = w.img;
+  });
+  
   const menu = document.getElementById("menu");
   const game = document.getElementById("game");
   const trex = document.getElementById("trex");
@@ -54,7 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
     index = 0;
 
     let w = words[current];
-    wordImage.src = w.img;
+    const img = new Image();
+    img.onload = () => {
+        wordImage.src = w.img;
+    };
+    img.src = w.img;
 
     updateProgress();
 
