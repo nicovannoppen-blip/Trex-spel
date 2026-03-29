@@ -5,31 +5,51 @@ const progressEl = document.getElementById("progress");
 const scoreEl = document.getElementById("score");
 const message = document.getElementById("message");
 
+const reward = document.getElementById("reward");
+const starsEl = document.getElementById("stars");
+const nextBtn = document.getElementById("nextBtn");
+
 let words = [
     {word:"kat", img:"assets/kat.png"},
     {word:"vis", img:"assets/vis.png"},
-    {word:"boom", img:"assets/boom.png"},
-    {word:"maan", img:"assets/maan.png"},
-    {word:"boek", img:"assets/boek.png"}
+    {word:"boom", img:"assets/boom.png"}
 ];
 
 let current = 0;
 let index = 0;
 let score = 0;
+let mistakes = 0;
+
+/* 🔊 geluid via Web Audio */
+function playSound(type){
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+
+    o.connect(g);
+    g.connect(ctx.destination);
+
+    if(type === "good") o.frequency.value = 800;
+    if(type === "bad") o.frequency.value = 200;
+    if(type === "eat") o.frequency.value = 500;
+
+    o.start();
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
+}
 
 /* spraak */
 function speak(text){
     let s = new SpeechSynthesisUtterance(text);
     s.lang = "nl-BE";
-    speechSynthesis.cancel(); // voorkomt overlap
+    speechSynthesis.cancel();
     speechSynthesis.speak(s);
 }
 
-/* level starten */
 function startLevel(){
     lettersDiv.innerHTML = "";
     message.innerText = "";
     index = 0;
+    mistakes = 0;
 
     let w = words[current];
     wordImage.src = w.img;
@@ -53,7 +73,6 @@ function startLevel(){
     });
 }
 
-/* letter eten */
 function eatLetter(el, letter){
     let correct = words[current].word[index];
 
@@ -62,44 +81,58 @@ function eatLetter(el, letter){
         index++;
         score += 10;
 
-        scoreEl.innerText = "⭐ " + score;
-
-        trex.style.transform = "scale(1.3)";
-        setTimeout(()=>trex.style.transform="scale(1)",150);
-
+        playSound("eat");
         speak(letter);
+
         updateProgress();
 
         if(index === words[current].word.length){
             let woord = words[current].word;
 
-            message.innerText = "Goed gedaan! 🎉";
+            playSound("good");
 
-            // 👉 NIEUW: volledig woord zeggen
             setTimeout(()=>{
                 speak(woord);
-            }, 500);
+            },500);
 
-            current++;
-
-            if(current >= words.length){
-                setTimeout(()=>{
-                    message.innerText = "Alles klaar! 🦖";
-                    speak("Goed gewerkt");
-                },1500);
-            } else {
-                setTimeout(startLevel, 2500);
-            }
+            showReward();
         }
+
     } else {
-        message.innerText = "Foutje!";
-        speak("Probeer opnieuw");
+        mistakes++;
         score -= 5;
+
+        playSound("bad");
+        speak("Foutje");
+
         scoreEl.innerText = "⭐ " + score;
     }
+
+    scoreEl.innerText = "⭐ " + score;
 }
 
-/* voortgang */
+function showReward(){
+    reward.classList.remove("hidden");
+
+    let stars = 3;
+    if(mistakes > 1) stars = 2;
+    if(mistakes > 3) stars = 1;
+
+    starsEl.innerText = "⭐".repeat(stars);
+}
+
+nextBtn.onclick = ()=>{
+    reward.classList.add("hidden");
+    current++;
+
+    if(current >= words.length){
+        message.innerText = "Alles klaar! 🦖";
+        speak("Goed gewerkt");
+    } else {
+        startLevel();
+    }
+};
+
 function updateProgress(){
     let word = words[current].word;
     progressEl.innerText =
