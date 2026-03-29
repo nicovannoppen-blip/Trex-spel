@@ -112,7 +112,7 @@ function eatLetter(el, letter){
 }
 
 function showReward(){
-    reward.classList.remove("hidden");
+   reward.style.display = "flex";
 
     let stars = 3;
     if(mistakes > 1) stars = 2;
@@ -122,7 +122,7 @@ function showReward(){
 }
 
 nextBtn.onclick = ()=>{
-    reward.classList.add("hidden");
+    reward.style.display = "none";
     current++;
 
     if(current >= words.length){
