@@ -20,20 +20,18 @@ let index = 0;
 let score = 0;
 let mistakes = 0;
 
-/* 🔊 geluid via Web Audio */
-function playSound(type){
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
+/* 🔊 geluid */
+function beep(freq){
+    let ctx = new (window.AudioContext || window.webkitAudioContext)();
+    let o = ctx.createOscillator();
+    let g = ctx.createGain();
 
     o.connect(g);
     g.connect(ctx.destination);
 
-    if(type === "good") o.frequency.value = 800;
-    if(type === "bad") o.frequency.value = 200;
-    if(type === "eat") o.frequency.value = 500;
-
+    o.frequency.value = freq;
     o.start();
+
     g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
 }
 
@@ -45,6 +43,18 @@ function speak(text){
     speechSynthesis.speak(s);
 }
 
+/* ✅ FIX: letters goed verspreiden */
+function randomPosition(el){
+    const margin = 100;
+
+    let x = Math.random() * (window.innerWidth - margin);
+    let y = Math.random() * (window.innerHeight - margin);
+
+    el.style.left = x + "px";
+    el.style.top = y + "px";
+}
+
+/* start level */
 function startLevel(){
     lettersDiv.innerHTML = "";
     message.innerText = "";
@@ -64,8 +74,7 @@ function startLevel(){
         el.className = "letter";
         el.innerText = letter;
 
-        el.style.left = Math.random()*80 + "vw";
-        el.style.top = (Math.random()*60+20) + "vh";
+        randomPosition(el); // ✅ FIX
 
         el.onclick = ()=>eatLetter(el, letter);
 
@@ -81,7 +90,7 @@ function eatLetter(el, letter){
         index++;
         score += 10;
 
-        playSound("eat");
+        beep(600);
         speak(letter);
 
         updateProgress();
@@ -89,11 +98,7 @@ function eatLetter(el, letter){
         if(index === words[current].word.length){
             let woord = words[current].word;
 
-            playSound("good");
-
-            setTimeout(()=>{
-                speak(woord);
-            },500);
+            setTimeout(()=>speak(woord), 500);
 
             showReward();
         }
@@ -102,17 +107,16 @@ function eatLetter(el, letter){
         mistakes++;
         score -= 5;
 
-        playSound("bad");
-        speak("Foutje");
-
-        scoreEl.innerText = "⭐ " + score;
+        beep(200);
+        speak("fout");
     }
 
     scoreEl.innerText = "⭐ " + score;
 }
 
+/* beloning */
 function showReward(){
-   reward.style.display = "flex";
+    reward.style.display = "flex";
 
     let stars = 3;
     if(mistakes > 1) stars = 2;
@@ -123,16 +127,18 @@ function showReward(){
 
 nextBtn.onclick = ()=>{
     reward.style.display = "none";
+
     current++;
 
     if(current >= words.length){
-        message.innerText = "Alles klaar! 🦖";
+        message.innerText = "Alles klaar!";
         speak("Goed gewerkt");
     } else {
         startLevel();
     }
 };
 
+/* voortgang */
 function updateProgress(){
     let word = words[current].word;
     progressEl.innerText =
@@ -141,18 +147,9 @@ function updateProgress(){
 }
 
 /* bewegen */
-function moveTrex(x,y){
-    trex.style.left = x + "px";
-    trex.style.top = y + "px";
-}
-
 document.addEventListener("click", e=>{
-    moveTrex(e.clientX, e.clientY);
-});
-
-document.addEventListener("touchstart", e=>{
-    let t = e.touches[0];
-    moveTrex(t.clientX, t.clientY);
+    trex.style.left = e.clientX + "px";
+    trex.style.top = e.clientY + "px";
 });
 
 startLevel();
