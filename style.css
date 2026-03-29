@@ -77,3 +77,75 @@ body {
     font-size:50px;
     margin:20px;
 }
+
+/* 🦖 hap animatie */
+@keyframes bite {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.bite {
+  animation: bite 0.2s;
+}
+
+/* ❌ fout animatie */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+.shake {
+  animation: shake 0.3s;
+}
+
+/* 🔤 zwevende letters */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.letter {
+  animation: float 2s infinite ease-in-out;
+}
+
+/* 💥 verdwijnen */
+@keyframes pop {
+  to {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.pop {
+  animation: pop 0.3s forwards;
+}
+
+/* ⭐ sterren animatie */
+@keyframes starPop {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+#stars {
+  animation: starPop 0.5s ease;
+}
+
+/* 🎊 confetti */
+.confetti {
+  position:absolute;
+  width:10px;
+  height:10px;
+  background:red;
+  animation: fall 2s linear forwards;
+}
+
+@keyframes fall {
+  to {
+    transform: translateY(100vh) rotate(360deg);
+  }
+}
