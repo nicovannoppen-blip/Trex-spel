@@ -9,6 +9,11 @@ const reward = document.getElementById("reward");
 const starsEl = document.getElementById("stars");
 const nextBtn = document.getElementById("nextBtn");
 
+const trexFrames = [
+    "assets/trex1.png",
+    "assets/trex2.png"
+];
+
 let words = [
     {word:"kat", img:"assets/kat.png"},
     {word:"vis", img:"assets/vis.png"},
@@ -137,6 +142,8 @@ function createConfetti(){
 }
 /* beloning */
 function showReward(){
+    running = false; // 🛑 stop lopen
+
     reward.style.display = "flex";
 
     let stars = 3;
@@ -145,11 +152,14 @@ function showReward(){
 
     starsEl.innerText = "⭐".repeat(stars);
 
-    createConfetti(); // 🎊 nieuw
+    createConfetti();
 }
 
 nextBtn.onclick = ()=>{
     reward.style.display = "none";
+
+    running = true;
+    animateTrex();
 
     current++;
 
@@ -174,5 +184,17 @@ document.addEventListener("click", e=>{
     trex.style.left = e.clientX + "px";
     trex.style.top = e.clientY + "px";
 });
+let running = true;
+let frame = 0;
+
+function animateTrex(){
+    if(!running) return;
+
+    frame = (frame + 1) % 2;
+    trex.src = trexFrames[frame];
+
+    setTimeout(animateTrex, 200); // snelheid van lopen
+}
 
 startLevel();
+animateTrex();
