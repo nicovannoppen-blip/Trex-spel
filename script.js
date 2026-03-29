@@ -10,8 +10,8 @@ const starsEl = document.getElementById("stars");
 const nextBtn = document.getElementById("nextBtn");
 
 const trexFrames = [
-    "assets/trex1.png",
-    "assets/trex2.png"
+    "assets/trex.png",
+    "assets/trex.png"
 ];
 
 let words = [
