@@ -17,12 +17,15 @@ let current = 0;
 let index = 0;
 let score = 0;
 
+/* spraak */
 function speak(text){
     let s = new SpeechSynthesisUtterance(text);
     s.lang = "nl-BE";
+    speechSynthesis.cancel(); // voorkomt overlap
     speechSynthesis.speak(s);
 }
 
+/* level starten */
 function startLevel(){
     lettersDiv.innerHTML = "";
     message.innerText = "";
@@ -32,7 +35,6 @@ function startLevel(){
     wordImage.src = w.img;
 
     updateProgress();
-
     speak("Zoek het woord");
 
     let shuffled = w.word.split('').sort(()=>Math.random()-0.5);
@@ -43,7 +45,7 @@ function startLevel(){
         el.innerText = letter;
 
         el.style.left = Math.random()*80 + "vw";
-        el.style.top = (Math.random()*70+10) + "vh";
+        el.style.top = (Math.random()*60+20) + "vh";
 
         el.onclick = ()=>eatLetter(el, letter);
 
@@ -51,6 +53,7 @@ function startLevel(){
     });
 }
 
+/* letter eten */
 function eatLetter(el, letter){
     let correct = words[current].word[index];
 
@@ -58,35 +61,45 @@ function eatLetter(el, letter){
         el.remove();
         index++;
         score += 10;
-        scoreEl.innerText = "Score: " + score;
 
-        trex.style.transform = "scale(1.2)";
+        scoreEl.innerText = "⭐ " + score;
+
+        trex.style.transform = "scale(1.3)";
         setTimeout(()=>trex.style.transform="scale(1)",150);
 
         speak(letter);
         updateProgress();
 
         if(index === words[current].word.length){
+            let woord = words[current].word;
+
             message.innerText = "Goed gedaan! 🎉";
-            speak("Goed gedaan");
+
+            // 👉 NIEUW: volledig woord zeggen
+            setTimeout(()=>{
+                speak(woord);
+            }, 500);
 
             current++;
 
             if(current >= words.length){
-                message.innerText = "Alles klaar! 🦖";
-                speak("Je bent klaar");
+                setTimeout(()=>{
+                    message.innerText = "Alles klaar! 🦖";
+                    speak("Goed gewerkt");
+                },1500);
             } else {
-                setTimeout(startLevel, 1500);
+                setTimeout(startLevel, 2500);
             }
         }
     } else {
         message.innerText = "Foutje!";
         speak("Probeer opnieuw");
         score -= 5;
-        scoreEl.innerText = "Score: " + score;
+        scoreEl.innerText = "⭐ " + score;
     }
 }
 
+/* voortgang */
 function updateProgress(){
     let word = words[current].word;
     progressEl.innerText =
@@ -94,7 +107,7 @@ function updateProgress(){
         "_".repeat(word.length-index);
 }
 
-// bewegen met klik/touch
+/* bewegen */
 function moveTrex(x,y){
     trex.style.left = x + "px";
     trex.style.top = y + "px";
