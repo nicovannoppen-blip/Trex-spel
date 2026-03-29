@@ -86,9 +86,14 @@ function eatLetter(el, letter){
     let correct = words[current].word[index];
 
     if(letter === correct){
-        el.remove();
+        el.classList.add("pop"); // 💥 animatie
+        setTimeout(()=>el.remove(), 300);
+
         index++;
         score += 10;
+
+        trex.classList.add("bite"); // 🦖 hap
+        setTimeout(()=>trex.classList.remove("bite"), 200);
 
         beep(600);
         speak(letter);
@@ -107,6 +112,9 @@ function eatLetter(el, letter){
         mistakes++;
         score -= 5;
 
+        trex.classList.add("shake"); // ❌ fout animatie
+        setTimeout(()=>trex.classList.remove("shake"), 300);
+
         beep(200);
         speak("fout");
     }
@@ -114,6 +122,19 @@ function eatLetter(el, letter){
     scoreEl.innerText = "⭐ " + score;
 }
 
+function createConfetti(){
+    for(let i=0;i<30;i++){
+        let c = document.createElement("div");
+        c.className = "confetti";
+
+        c.style.left = Math.random()*100 + "vw";
+        c.style.background = ["red","yellow","blue","green"][Math.floor(Math.random()*4)];
+
+        document.body.appendChild(c);
+
+        setTimeout(()=>c.remove(),2000);
+    }
+}
 /* beloning */
 function showReward(){
     reward.style.display = "flex";
@@ -123,6 +144,8 @@ function showReward(){
     if(mistakes > 3) stars = 1;
 
     starsEl.innerText = "⭐".repeat(stars);
+
+    createConfetti(); // 🎊 nieuw
 }
 
 nextBtn.onclick = ()=>{
