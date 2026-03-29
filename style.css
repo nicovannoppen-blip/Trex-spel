@@ -149,3 +149,7 @@ body {
     transform: translateY(100vh) rotate(360deg);
   }
 }
+/* optioneel: iets vloeiender */
+#trex {
+    image-rendering: pixelated;
+}
