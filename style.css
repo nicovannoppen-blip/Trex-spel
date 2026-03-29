@@ -5,7 +5,7 @@
     width:100%;
     height:100%;
     background:#ffffffee;
-    display:flex;
+    display:none; /* 👈 BELANGRIJK */
     flex-direction:column;
     align-items:center;
     justify-content:center;
@@ -15,7 +15,9 @@
 #reward h2 {
     font-size:40px;
 }
-
+.hidden {
+    display:none;
+}
 #stars {
     font-size:50px;
     margin:20px;
