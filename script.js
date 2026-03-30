@@ -116,25 +116,33 @@ function startLevel(){
     mistakes=0;
     message.innerText="";
 
+    // controleer of er nog een woord is
+    if(current >= words.length) current = 0;
+
     let w = words[current];
-    wordImage.src=w.img;
+
+    // laat afbeelding zien
+    wordImage.src = w.img;
+    wordImage.style.display = "block";
 
     updateProgress();
-    levelText.innerText=level;
+    levelText.innerText = level;
     speak("Zoek het woord");
 
     let letters = getLettersForLevel(w.word);
+
     letters.forEach(letter=>{
         let el = document.createElement("div");
         el.className="letter";
-        el.innerText=letter;
+        el.innerText = letter;
         randomPosition(el);
         el.onclick = ()=>eatLetter(el,letter);
         lettersDiv.appendChild(el);
-        if(level>=4) movingLetters.push(el);
+        if(level >= 4) movingLetters.push(el);
     });
 
-    if(level>=4) moveLetters();
+    // start bewegen letters alleen als level 4+
+    if(level >= 4) moveLetters();
 }
 
 /* letters klikken */
@@ -226,11 +234,16 @@ function createLevelButtons(){
         let btn = document.createElement("button");
         btn.className="levelBtn";
         btn.innerText="Level "+i;
-        btn.onclick = ()=>{
-            level=i; current=0; score=0;
-            menu.style.display="none"; game.style.display="block";
+       btn.onclick = ()=>{
+            level = i;
+            current = 0;
+            score = 0;
+            // reset score en UI
+            scoreEl.innerText = "⭐ " + score;
+            menu.style.display="none";
+            game.style.display="block";
             startLevel();
-        }
+        };
         levelButtonsContainer.appendChild(btn);
     }
 }
