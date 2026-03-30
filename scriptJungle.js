@@ -1,5 +1,20 @@
 // Woordenlijst
-const words = ["TIGER", "MONKEY", "JUNGLE", "LEAF", "RIVER"];
+const words = [
+  "tijger", "aap", "leeuw", "olifant", "slang", "papegaai", "kikker", "vlinder", 
+  "apen", "boom", "struik", "rivier", "waterval", "lianen", "jungle", "bloem", 
+  "blad", "wortel", "rots", "nevel", "zon", "regen", "regenwoud", "oerwoud", 
+  "schorpioen", "spin", "mieren", "bijen", "kolibrie", "slingeren", "boomtop", 
+  "groen", "dier", "vogels", "insect", "water", "slurf", "staart", "klimmen", 
+  "spring", "luiaard", "panter", "cheeta", "gorilla", "tropisch", "zand", "grond", 
+  "tak", "wortels", "boomstam", "schaduw", "moeras", "vijver", "libel", "spinweb", 
+  "geur", "fruit", "banaan", "mango", "papaja", "ananas", "noot", "wortelstok", 
+  "paradijs", "geluid", "gekraak", "geritsel", "schemering", "nacht", "dag", 
+  "zonlicht", "regenbui", "mist", "vogeltje", "kikkerdril", "olifantenpad", 
+  "apenrots", "waterdruppel", "druppel", "takken", "slurfbeweging", "boomschors", 
+  "planten", "wortelslingers", "bos", "bamboe", "panterprint", "speurtocht", 
+  "verstoppen", "schuilplaats", "luipaard", "kapokboom", "monkey", "boomvarken", 
+  "rotsformatie", "rotsen", "natuur"
+];
 let currentWord = "";
 let collected = "";
 let score = 0;
