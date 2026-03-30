@@ -1,4 +1,4 @@
-/* Body jungle achtergrond */
+/* Jungle achtergrond en game container */
 body {
     font-family: Arial, sans-serif;
     background-image: url('jungle-background.jpg');
@@ -13,7 +13,6 @@ body {
     position: relative;
 }
 
-/* Game container gecentreerd */
 .game-container {
     background: rgba(255, 255, 255, 0.85);
     padding: 20px 40px;
@@ -26,31 +25,29 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
-/* Specifiek voor Letter-jungle: geen hoofdletters */
-.letter-jungle-game #word {
+/* Woord groot en vet bij geraden letters */
+#word {
     font-size: 48px;
     letter-spacing: 8px;
     margin: 20px 0;
-    text-transform: none; /* geen drukletters */
+    text-transform: none;
 }
-
-.letter-jungle-game #word span.guessed {
+#word span.guessed {
     font-weight: bold;
     color: #4caf50;
 }
-.letter-jungle-game #word span.unguessed {
+#word span.unguessed {
     font-weight: normal;
     color: black;
 }
 
-/* Letters om te klikken */
+/* Letters container */
 #letters-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin: 20px 0;
     position: relative;
-    z-index: 2;
 }
 .letter {
     background-color: #4caf50;
@@ -65,7 +62,8 @@ body {
 }
 .letter:hover { transform: scale(1.2); }
 
-.letter-jungle-game .button {
+/* Terug naar home knop */
+.button {
     display: inline-block;
     margin-top: 20px;
     padding: 12px 25px;
@@ -75,7 +73,7 @@ body {
     text-decoration: none;
     border-radius: 8px;
 }
-.letter-jungle-game.button:hover { background-color: #005bb5; }
+.button:hover { background-color: #005bb5; }
 
 /* Bladeren animatie */
 #leaves-container {
@@ -101,5 +99,3 @@ body {
     0% { transform: translateY(-50px) rotate(0deg); }
     100% { transform: translateY(110vh) rotate(360deg); }
 }
-
-
