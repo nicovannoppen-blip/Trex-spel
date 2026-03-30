@@ -56,17 +56,19 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
-/* Woord groot weergeven */
-#word {
+/* Specifiek voor Letter-jungle: geen hoofdletters */
+.letter-jungle-game #word {
     font-size: 48px;
     letter-spacing: 8px;
     margin: 20px 0;
+    text-transform: none; /* geen drukletters */
 }
-#word span.guessed {
+
+.letter-jungle-game #word span.guessed {
     font-weight: bold;
     color: #4caf50;
 }
-#word span.unguessed {
+.letter-jungle-game #word span.unguessed {
     font-weight: normal;
     color: black;
 }
