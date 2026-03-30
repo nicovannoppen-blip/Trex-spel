@@ -2,12 +2,16 @@
 const words = ["TIGER", "MONKEY", "JUNGLE", "LEAF", "RIVER"];
 let currentWord = "";
 let collected = "";
+let score = 0;
 
 // HTML-elementen
 const wordEl = document.getElementById("word");
 const collectedEl = document.getElementById("collected");
 const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
+const scoreEl = document.getElementById("score");
+const correctSound = document.getElementById("correct-sound");
+const wrongSound = document.getElementById("wrong-sound");
 
 // Start een nieuw woord
 function newWord() {
@@ -15,11 +19,9 @@ function newWord() {
     collectedEl.textContent = collected;
     messageEl.textContent = "";
 
-    // Kies willekeurig een woord
     currentWord = words[Math.floor(Math.random() * words.length)];
     wordEl.textContent = currentWord;
 
-    // Genereer letters (random volgorde + extra letters)
     lettersContainer.innerHTML = "";
     let letters = currentWord.split("");
 
@@ -47,15 +49,36 @@ function clickLetter(letter, btn) {
         collected += letter;
         collectedEl.textContent = collected;
         btn.style.visibility = "hidden";
+        correctSound.play();
 
         if (collected === currentWord) {
             messageEl.textContent = "Goed gedaan! 🎉";
+            score += 10;
+            scoreEl.textContent = "Score: " + score;
             setTimeout(newWord, 1500);
         }
     } else {
         messageEl.textContent = "Fout! Probeer opnieuw.";
+        wrongSound.play();
     }
 }
 
 // Start het eerste woord
 newWord();
+
+// 🌿 Beweeg bladeren
+const leavesContainer = document.getElementById("leaves-container");
+function createLeaf() {
+    const leaf = document.createElement("div");
+    leaf.classList.add("leaf");
+    leaf.style.left = Math.random() * window.innerWidth + "px";
+    leaf.style.animationDuration = 5 + Math.random() * 5 + "s";
+    leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+    leavesContainer.appendChild(leaf);
+
+    // Verwijder blad als animatie klaar is
+    leaf.addEventListener("animationend", () => leaf.remove());
+}
+
+// Iedere 500ms een blad
+setInterval(createLeaf, 500);
