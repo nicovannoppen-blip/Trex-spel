@@ -193,7 +193,7 @@ function animateTrex(){
     frame = (frame + 1) % 2;
     trex.src = trexFrames[frame];
 
-    setTimeout(animateTrex, 200); // snelheid van lopen
+    setTimeout(animateTrex, 2000); // snelheid van lopen
 }
 
 startLevel();
