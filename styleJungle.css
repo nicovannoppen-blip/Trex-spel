@@ -1,4 +1,4 @@
-/* body blijft fullscreen jungle */
+/* Body jungle achtergrond */
 body {
     font-family: Arial, sans-serif;
     background-image: url('jungle-background.jpg');
@@ -7,13 +7,13 @@ body {
     margin: 0;
     height: 100vh;
     overflow: hidden;
-    position: relative;
     display: flex;
     justify-content: center;
-    align-items: center; /* zorgt voor verticale centrering */
+    align-items: center;
+    position: relative;
 }
 
-/* game-container in het midden van het scherm */
+/* Game container gecentreerd */
 .game-container {
     background: rgba(255, 255, 255, 0.85);
     padding: 20px 40px;
@@ -21,17 +21,28 @@ body {
     text-align: center;
     width: 90%;
     max-width: 600px;
-    z-index: 2; /* boven bladeren */
-    /* centreren via flex van body, dus geen absolute position nodig */
+    z-index: 2;
+    position: relative;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
-    position: relative; 
 }
 
-
-h1 {
-    margin-bottom: 20px;
+/* Woord groot weergeven */
+#word {
+    font-size: 48px;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin: 20px 0;
+}
+#word span.guessed {
+    font-weight: bold;
+    color: #4caf50;
+}
+#word span.unguessed {
+    font-weight: normal;
+    color: black;
 }
 
+/* Letters om te klikken */
 #letters-container {
     display: flex;
     flex-wrap: wrap;
@@ -40,7 +51,6 @@ h1 {
     position: relative;
     z-index: 2;
 }
-
 .letter {
     background-color: #4caf50;
     color: white;
@@ -52,10 +62,7 @@ h1 {
     cursor: pointer;
     transition: transform 0.2s;
 }
-
-.letter:hover {
-    transform: scale(1.2);
-}
+.letter:hover { transform: scale(1.2); }
 
 .button {
     display: inline-block;
@@ -67,12 +74,9 @@ h1 {
     text-decoration: none;
     border-radius: 8px;
 }
+.button:hover { background-color: #005bb5; }
 
-.button:hover {
-    background-color: #005bb5;
-}
-
-/* bladeren animatie */
+/* Bladeren animatie */
 #leaves-container {
     position: absolute;
     width: 100%;
@@ -80,10 +84,8 @@ h1 {
     top: 0;
     left: 0;
     pointer-events: none;
-    z-index: 1; /* achter game-container */
+    z-index: 1;
 }
-
-
 .leaf {
     position: absolute;
     width: 40px;
@@ -94,22 +96,6 @@ h1 {
     animation-name: fall;
     animation-timing-function: linear;
 }
-/* Maak het doelwoord groot en duidelijk */
-#word {
-    font-size: 48px; /* groter woord */
-    letter-spacing: 8px;
-    text-transform: uppercase;
-    margin: 20px 0;
-}
-#word span.guessed {
-    font-weight: bold;
-    color: #4caf50; /* optioneel: groen voor geraden letters */
-}
-#word span.unguessed {
-    font-weight: normal;
-    color: black;
-}
-
 @keyframes fall {
     0% { transform: translateY(-50px) rotate(0deg); }
     100% { transform: translateY(110vh) rotate(360deg); }
