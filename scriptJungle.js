@@ -83,7 +83,7 @@ function clickLetter(letter, btn) {
     // Spreek de aangeklikte letter uit
     speak(letter);
 
-    // Pas geluid na 2 seconden toe
+    // Pas geluid na 1 seconde toe
     setTimeout(() => {
         if (currentWord[collected.length] === letter) {
             collected += letter;
@@ -103,7 +103,7 @@ function clickLetter(letter, btn) {
             speak("Fout! Probeer opnieuw.");
             wrongSound?.play();
         }
-    }, 2000); // 2 seconden wachten
+    }, 1000); // 2 seconden wachten
 }
 
 // Start spel
