@@ -1,4 +1,3 @@
-/* Body jungle achtergrond */
 body {
     font-family: Arial, sans-serif;
     background-image: url('jungle-background.jpg');
@@ -13,7 +12,6 @@ body {
     position: relative;
 }
 
-/* Game container gecentreerd */
 .game-container {
     background: rgba(255, 255, 255, 0.85);
     padding: 20px 40px;
@@ -26,12 +24,12 @@ body {
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
-/* Woord groot weergeven */
+/* Woord groot en vet bij geraden letters */
 #word {
     font-size: 48px;
     letter-spacing: 8px;
-    text-transform: uppercase;
     margin: 20px 0;
+    text-transform: none;
 }
 #word span.guessed {
     font-weight: bold;
@@ -42,14 +40,13 @@ body {
     color: black;
 }
 
-/* Letters om te klikken */
+/* Letters container */
 #letters-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin: 20px 0;
     position: relative;
-    z-index: 2;
 }
 .letter {
     background-color: #4caf50;
@@ -64,6 +61,7 @@ body {
 }
 .letter:hover { transform: scale(1.2); }
 
+/* Terug naar home knop */
 .button {
     display: inline-block;
     margin-top: 20px;
