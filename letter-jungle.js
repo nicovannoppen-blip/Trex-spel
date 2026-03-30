@@ -107,7 +107,7 @@ function clickLetter(letter, btn) {
             speak("Fout! Probeer opnieuw.");
             wrongSound?.play();
         }
-    }, 1000);
+    }, 500);
 }
 
 function speakLetterNL(letter) {
