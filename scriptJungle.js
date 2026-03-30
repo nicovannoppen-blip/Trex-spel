@@ -105,6 +105,20 @@ function clickLetter(letter, btn) {
         }
     }, 1000); // 2 seconden wachten
 }
+function updateWordDisplay() {
+    wordEl.innerHTML = "";
+    for (let i = 0; i < currentWord.length; i++) {
+        const span = document.createElement("span");
+        if (i < collected.length) {
+            span.classList.add("guessed");
+            span.textContent = currentWord[i];
+        } else {
+            span.classList.add("unguessed");
+            span.textContent = currentWord[i];
+        }
+        wordEl.appendChild(span);
+    }
+}
 
 // Start spel
 startGame();
