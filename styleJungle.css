@@ -1,3 +1,4 @@
+/* body blijft fullscreen jungle */
 body {
     font-family: Arial, sans-serif;
     background-image: url('jungle-background.jpg');
@@ -7,8 +8,12 @@ body {
     height: 100vh;
     overflow: hidden;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* zorgt voor verticale centrering */
 }
 
+/* game-container in het midden van het scherm */
 .game-container {
     background: rgba(255, 255, 255, 0.85);
     padding: 20px 40px;
@@ -16,9 +21,12 @@ body {
     text-align: center;
     width: 90%;
     max-width: 600px;
-    position: relative;
-    z-index: 2;
+    z-index: 2; /* boven bladeren */
+    /* centreren via flex van body, dus geen absolute position nodig */
+    box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    position: relative; 
 }
+
 
 h1 {
     margin-bottom: 20px;
