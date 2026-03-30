@@ -27,7 +27,7 @@ const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
 const scoreEl = document.getElementById("score");
 
-// Geluiden blijven optioneel
+// Geluiden optioneel
 const correctSound = document.getElementById("correct-sound");
 const wrongSound = document.getElementById("wrong-sound");
 
@@ -39,7 +39,7 @@ function speak(text) {
     window.speechSynthesis.speak(utterance);
 }
 
-// 🎤 Leg uit hoe het spel werkt bij start
+// Start uitleg bij het begin
 function startGame() {
     speak("Welkom bij Letter Jungle! Klik op de letters in de juiste volgorde om het woord te bouwen.");
     setTimeout(newWord, 3000); // start eerste woord na uitleg
@@ -54,8 +54,8 @@ function newWord() {
     currentWord = words[Math.floor(Math.random() * words.length)];
     wordEl.textContent = currentWord;
 
-    // Spreek het doelwoord uit
-    speak("Bouw het woord: " + currentWord.split("").join(" "));
+    // Spreek het doelwoord uit (hele woord, niet gespeld)
+    speak("Bouw het woord: " + currentWord);
 
     lettersContainer.innerHTML = "";
     let letters = currentWord.split("");
@@ -83,30 +83,33 @@ function clickLetter(letter, btn) {
     // Spreek de aangeklikte letter uit
     speak(letter);
 
-    if (currentWord[collected.length] === letter) {
-        collected += letter;
-        collectedEl.textContent = collected;
-        btn.style.visibility = "hidden";
-        correctSound?.play();
+    // Pas geluid na 2 seconden toe
+    setTimeout(() => {
+        if (currentWord[collected.length] === letter) {
+            collected += letter;
+            collectedEl.textContent = collected;
+            btn.style.visibility = "hidden";
+            correctSound?.play();
 
-        if (collected === currentWord) {
-            messageEl.textContent = "Goed gedaan! 🎉";
-            speak("Goed gedaan!");
-            score += 10;
-            scoreEl.textContent = "Score: " + score;
-            setTimeout(newWord, 1500);
+            if (collected === currentWord) {
+                messageEl.textContent = "Goed gedaan! 🎉";
+                speak("Goed gedaan!");
+                score += 10;
+                scoreEl.textContent = "Score: " + score;
+                setTimeout(newWord, 1500);
+            }
+        } else {
+            messageEl.textContent = "Fout! Probeer opnieuw.";
+            speak("Fout! Probeer opnieuw.");
+            wrongSound?.play();
         }
-    } else {
-        messageEl.textContent = "Fout! Probeer opnieuw.";
-        speak("Fout! Probeer opnieuw.");
-        wrongSound?.play();
-    }
+    }, 2000); // 2 seconden wachten
 }
 
 // Start spel
 startGame();
 
-// 🌿 Bladeren animatie blijft zoals eerder
+// Bladeren animatie blijft hetzelfde
 const leavesContainer = document.getElementById("leaves-container");
 function createLeaf() {
     const leaf = document.createElement("div");
