@@ -30,7 +30,6 @@ body {
 #word {
     font-size: 48px;
     letter-spacing: 8px;
-    text-transform: uppercase;
     margin: 20px 0;
 }
 #word span.guessed {
