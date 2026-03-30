@@ -153,3 +153,6 @@ body {
 #trex {
     image-rendering: pixelated;
 }
+.letter {
+    transition: transform 0.2s;
+}
