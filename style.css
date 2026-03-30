@@ -17,10 +17,7 @@ body {
     background: linear-gradient(#aee1ff, #ffffff);
 }
 
-#menu h1 {
-    font-size:40px;
-}
-
+#menu h1 { font-size:40px; }
 #menu button {
     font-size:24px;
     padding:15px 30px;
@@ -32,23 +29,10 @@ body {
 }
 
 /* GAME */
-#game {
-    position:relative;
-    width:100vw;
-    height:100vh;
-    padding-top:120px;
-    padding-right:120px;
-}
+#game { position:relative; width:100vw; height:100vh; padding-top:120px; padding-right:120px; }
 
 /* T-Rex */
-#trex {
-    position:absolute;
-    width:80px;
-    left:50px;
-    top:50px;
-    transition: left 0.3s linear, top 0.3s linear;
-    image-rendering: pixelated;
-}
+#trex { position:absolute; width:80px; left:50px; top:50px; transition: left 0.3s linear, top 0.3s linear; image-rendering: pixelated; }
 
 /* Letters */
 .letter {
@@ -66,135 +50,43 @@ body {
     transition: transform 0.2s;
 }
 
-.letter:hover {
-    transform: scale(1.2);
-}
+.letter:hover { transform: scale(1.2); }
 
 /* Animaties */
-@keyframes bite {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.4); }
-  100% { transform: scale(1); }
-}
+@keyframes bite { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } }
 .bite { animation: bite 0.2s; }
 
-@keyframes shake {
-  0% { transform: translateX(0); }
-  25% { transform: translateX(-5px); }
-  50% { transform: translateX(5px); }
-  75% { transform: translateX(-5px); }
-  100% { transform: translateX(0); }
-}
+@keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } }
 .shake { animation: shake 0.3s; }
 
-@keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
-}
+@keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
 
-@keyframes pop {
-  to { transform: scale(2); opacity: 0; }
-}
+@keyframes pop { to { transform: scale(2); opacity: 0; } }
 .pop { animation: pop 0.3s forwards; }
 
-@keyframes starPop {
-  0% { transform: scale(0); }
-  100% { transform: scale(1); }
-}
+@keyframes starPop { 0% { transform: scale(0); } 100% { transform: scale(1); } }
 #stars { animation: starPop 0.5s ease; }
 
-@keyframes fall {
-  to { transform: translateY(100vh) rotate(360deg); }
-}
-.confetti {
-    position:absolute;
-    width:10px;
-    height:10px;
-    background:red;
-    animation: fall 2s linear forwards;
-}
+@keyframes fall { to { transform: translateY(100vh) rotate(360deg); } }
+.confetti { position:absolute; width:10px; height:10px; background:red; animation: fall 2s linear forwards; }
 
 /* UI */
 #target { position:absolute; top:10px; right:10px; }
-#target img { width:80px; }
+#target img { width:80px; border-radius:8px; border:2px solid #333; }
 
-#progress {
-    position:absolute;
-    top:100px;
-    right:10px;
-    font-size:28px;
-}
-
-#score {
-    position:absolute;
-    top:10px;
-    left:10px;
-    background:white;
-    padding:10px 14px;
-    border-radius:12px;
-    font-size:20px;
-    font-weight:bold;
-}
+#progress { position:absolute; top:100px; right:10px; font-size:28px; }
+#score { position:absolute; top:10px; left:10px; background:white; padding:10px 14px; border-radius:12px; font-size:20px; font-weight:bold; }
 
 /* Reward */
-#reward {
-    display:none;
-    position:absolute;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-    background:#ffffffee;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-}
+#reward { display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#ffffffee; justify-content:center; align-items:center; flex-direction:column; }
 #stars { font-size:50px; margin:20px; }
-
 #reward h2 { font-size:40px; }
-#nextBtn {
-    font-size:22px;
-    padding:15px 25px;
-    border:none;
-    border-radius:12px;
-    background:#4caf50;
-    color:white;
-    cursor:pointer;
-}
+#nextBtn { font-size:22px; padding:15px 25px; border:none; border-radius:12px; background:#4caf50; color:white; cursor:pointer; }
 
 /* Level UI */
-#levelUI {
-    position:absolute;
-    bottom:10px;
-    left:50%;
-    transform:translateX(-50%);
-    text-align:center;
-    font-weight:bold;
-}
-#levelBar {
-    width:200px;
-    height:10px;
-    background:#ddd;
-    border-radius:10px;
-    overflow:hidden;
-    margin-top:5px;
-}
-#levelFill {
-    height:100%;
-    width:0%;
-    background:#4caf50;
-    transition:0.3s;
-}
+#levelUI { position:absolute; bottom:10px; left:50%; transform:translateX(-50%); text-align:center; font-weight:bold; }
+#levelBar { width:200px; height:10px; background:#ddd; border-radius:10px; overflow:hidden; margin-top:5px; }
+#levelFill { height:100%; width:0%; background:#4caf50; transition:0.3s; }
 
 /* Back button */
-#backBtn {
-    position:absolute;
-    bottom:10px;
-    right:10px;
-    padding:10px;
-    border:none;
-    border-radius:10px;
-    background:white;
-    cursor:pointer;
-}
+#backBtn { position:absolute; bottom:10px; right:10px; padding:10px; border:none; border-radius:10px; background:white; cursor:pointer; }
