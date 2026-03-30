@@ -70,7 +70,7 @@ function newWord() {
     currentWord = words[Math.floor(Math.random() * words.length)];
     updateWordDisplay();
 
-    // Spreek hele woord uit, niet gespeld
+    // Spreek hele woord uit
     speak("Bouw het woord: " + currentWord);
 
     lettersContainer.innerHTML = "";
