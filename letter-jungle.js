@@ -16,6 +16,7 @@ const words = [
   "rotsformatie", "rotsen", "natuur"
 ];
  
+
 let currentWord = "";
 let collected = "";
 let score = 0;
@@ -39,7 +40,7 @@ function speak(text) {
     window.speechSynthesis.speak(utterance);
 }
 
-// Update woordweergave
+// Update woordweergave met vetgedrukte letters
 function updateWordDisplay() {
     wordEl.innerHTML = "";
     for (let i = 0; i < currentWord.length; i++) {
@@ -70,6 +71,7 @@ function newWord() {
     currentWord = words[Math.floor(Math.random() * words.length)];
     updateWordDisplay();
 
+    // Spreek hele woord uit
     speak("Bouw het woord: " + currentWord);
 
     lettersContainer.innerHTML = "";
@@ -92,6 +94,7 @@ function newWord() {
 
 // Letter klik
 function clickLetter(letter, btn) {
+    // Spreek letter uit
     speak(letter);
 
     setTimeout(() => {
@@ -99,6 +102,7 @@ function clickLetter(letter, btn) {
             collected += letter;
             collectedEl.textContent = collected;
             btn.style.visibility = "hidden";
+
             updateWordDisplay();
             correctSound?.play();
 
@@ -114,13 +118,13 @@ function clickLetter(letter, btn) {
             speak("Fout! Probeer opnieuw.");
             wrongSound?.play();
         }
-    }, 1000);
+    }, 2000); // 2 seconden wachten
 }
 
 // Start spel
 startGame();
 
-// Bladeren animatie
+// 🌿 Bladeren animatie
 const leavesContainer = document.getElementById("leaves-container");
 function createLeaf() {
     const leaf = document.createElement("div");
