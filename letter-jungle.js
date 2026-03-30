@@ -85,8 +85,7 @@ function newWord() {
 }
 
 function clickLetter(letter, btn) {
-    // Spreek de letter als losse letter
-    speak(letter + " "); // toevoeging van spatie voorkomt dat "m" als "meter" wordt gelezen
+    speakLetterNL(letter); // nu correct in NL
 
     setTimeout(() => {
         if (currentWord[collected.length] === letter) {
@@ -109,6 +108,44 @@ function clickLetter(letter, btn) {
             wrongSound?.play();
         }
     }, 1000);
+}
+
+function speakLetterNL(letter) {
+    // Map van letters die anders worden uitgesproken
+    const phonetic = {
+        "a": "aa",
+        "b": "bee",
+        "c": "see",
+        "d": "dee",
+        "e": "ee",
+        "f": "ef",
+        "g": "gee",
+        "h": "haa",
+        "i": "ie",
+        "j": "jee",
+        "k": "kaa",
+        "l": "el",
+        "m": "em",
+        "n": "en",
+        "o": "oo",
+        "p": "pee",
+        "q": "kuu",
+        "r": "er",
+        "s": "es",
+        "t": "tee",
+        "u": "uu",
+        "v": "vee",
+        "w": "wee",
+        "x": "iks",
+        "y": "ij",
+        "z": "zet"
+    };
+
+    const utterance = new SpeechSynthesisUtterance(phonetic[letter.toLowerCase()] || letter);
+    utterance.lang = "nl-NL"; // Nederlands
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
 }
 
 // Start spel
