@@ -85,7 +85,9 @@ function newWord() {
 }
 
 function clickLetter(letter, btn) {
-    speak(letter);
+    // Spreek de letter als losse letter
+    speak(letter + " "); // toevoeging van spatie voorkomt dat "m" als "meter" wordt gelezen
+
     setTimeout(() => {
         if (currentWord[collected.length] === letter) {
             collected += letter;
