@@ -123,7 +123,7 @@ function eatLetter(el, letter){
         beep(200);
         speak("fout");
     }
-
+    moveToElement(el);
     scoreEl.innerText = "⭐ " + score;
 }
 
@@ -194,6 +194,12 @@ function animateTrex(){
     trex.src = trexFrames[frame];
 
     setTimeout(animateTrex, 2000); // snelheid van lopen
+}
+
+function moveToElement(el){
+    const rect = el.getBoundingClientRect();
+    trex.style.left = rect.left + "px";
+    trex.style.top = rect.top + "px";
 }
 
 startLevel();
