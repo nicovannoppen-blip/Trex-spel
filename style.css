@@ -1,4 +1,17 @@
-
+/* Body jungle achtergrond */
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('jungle-background.jpg');
+    background-size: cover;
+    background-position: center;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
 
 .container {
     text-align: center;
