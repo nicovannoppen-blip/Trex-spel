@@ -1,7 +1,7 @@
 /* Body styling */
 body {
     font-family: Arial, sans-serif;
-    background-image: url('jungle-background.jpg'); /* zelfde jungle achtergrond */
+    background-image: url('jungle-background.jpg'); /* jungle achtergrond */
     background-size: cover;
     background-position: center;
     margin: 0;
@@ -10,17 +10,22 @@ body {
     justify-content: center;
     align-items: center;
 }
-h1 {
-    color: white;
-}
 
 /* Container gecentreerd */
 .home-container {
-    background: rgba(255, 255, 255, 0.85);
+    background: rgba(0, 0, 0, 0.5); /* iets donkerder zodat witte tekst goed zichtbaar is */
     padding: 40px 60px;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
+}
+
+/* Titel styling */
+.home-container h1 {
+    color: white;        /* wit */
+    text-align: center;  /* gecentreerd */
+    font-size: 48px;
+    margin-bottom: 20px;
 }
 
 /* Knoppen */
