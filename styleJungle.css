@@ -94,6 +94,21 @@ h1 {
     animation-name: fall;
     animation-timing-function: linear;
 }
+/* Maak het doelwoord groot en duidelijk */
+#word {
+    font-size: 48px; /* groter woord */
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin: 20px 0;
+}
+#word span.guessed {
+    font-weight: bold;
+    color: #4caf50; /* optioneel: groen voor geraden letters */
+}
+#word span.unguessed {
+    font-weight: normal;
+    color: black;
+}
 
 @keyframes fall {
     0% { transform: translateY(-50px) rotate(0deg); }
