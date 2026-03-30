@@ -1,1 +1,29 @@
 body { margin:0; font-family: Arial; background: linear-gradient(#aee1ff, #ffffff); overflow:hidden; } #game { position:relative; width:100vw; height:100vh; } /* ✅ FIX: dino correct formaat */ #trex { position:absolute; width:80px; /* kleiner */ left:50px; top:50px; transition:0.15s; } /* ✅ FIX: letters correct zichtbaar */ .letter { position:absolute; font-size:50px; padding:12px 18px; border-radius:12px; background:#ff9800; color:white; font-weight:bold; cursor:pointer; } /* UI */ #target { position:absolute; top:10px; right:10px; } #target img { width:80px; } #progress { position:absolute; top:100px; right:10px; font-size:28px; } #score { position:absolute; top:10px; left:10px; background:white; padding:8px; border-radius:10px; } /* ✅ FIX: reward standaard UIT */ #reward { display:none; position:absolute; top:0; left:0; width:100%; height:100%; background:#ffffffee; justify-content:center; align-items:center; flex-direction:column; } #stars { font-size:50px; margin:20px; } /* 🦖 hap animatie */ @keyframes bite { 0% { transform: scale(1); } 50% { transform: scale(1.4); } 100% { transform: scale(1); } } .bite { animation: bite 0.2s; } /* ❌ fout animatie */ @keyframes shake { 0% { transform: translateX(0); } 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-5px); } 100% { transform: translateX(0); } } .shake { animation: shake 0.3s; } /* 🔤 zwevende letters */ @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } } .letter { animation: float 2s infinite ease-in-out; } /* 💥 verdwijnen */ @keyframes pop { to { transform: scale(2); opacity: 0; } } .pop { animation: pop 0.3s forwards; } /* ⭐ sterren animatie */ @keyframes starPop { 0% { transform: scale(0); } 100% { transform: scale(1); } } #stars { animation: starPop 0.5s ease; } /* 🎊 confetti */ .confetti { position:absolute; width:10px; height:10px; background:red; animation: fall 2s linear forwards; } @keyframes fall { to { transform: translateY(100vh) rotate(360deg); } } /* optioneel: iets vloeiender */ #trex { image-rendering: pixelated; }
+
+/* MENU */
+#menu {
+    position:absolute;
+    width:100%;
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    background: linear-gradient(#aee1ff, #ffffff);
+}
+
+#menu h1 { font-size:40px; margin-bottom:10px; }
+#menu p { font-size:20px; margin-bottom:20px; }
+
+#menu button, .levelBtn {
+    font-size:24px;
+    padding:12px 24px;
+    margin:5px;
+    border:none;
+    border-radius:12px;
+    background:#4caf50;
+    color:white;
+    cursor:pointer;
+}
+
+.levelBtn.selected { background:#ff9800; }
