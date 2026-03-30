@@ -38,3 +38,27 @@ body { margin:0; font-family: Arial; background: linear-gradient(#aee1ff, #fffff
 .letter {
     pointer-events: auto; /* letters kunnen nog steeds aangeklikt worden */
 }
+
+#score {
+    position:absolute;
+    top:10px;
+    left:10px;
+    background:white;
+    padding:8px 12px;
+    border-radius:10px;
+    z-index:1000; /* boven de rest */
+}
+
+#backBtn {
+    position:absolute;
+    top:10px;
+    right:10px;
+    z-index:1000;
+    font-size:18px;
+    padding:6px 12px;
+    border-radius:8px;
+    background:#ff9800;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
