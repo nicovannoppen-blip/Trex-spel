@@ -13,11 +13,12 @@ body {
 
 /* Container gecentreerd */
 .home-container {
-    background: rgba(0, 0, 0, 0.5); /* iets donkerder zodat witte tekst goed zichtbaar is */
+    background: rgba(0, 0, 0, 0.5); /* donkerder voor contrast */
     padding: 40px 60px;
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 0 20px rgba(0,0,0,0.3);
+    animation: fadeIn 1.5s ease-in-out;
 }
 
 /* Titel styling */
@@ -26,6 +27,15 @@ body {
     text-align: center;  /* gecentreerd */
     font-size: 48px;
     margin-bottom: 20px;
+    animation: fadeIn 2s ease-in-out;
+}
+
+/* Subtitle styling */
+.home-container p {
+    color: white;       /* wit */
+    font-size: 20px;
+    margin-bottom: 30px;
+    animation: fadeIn 2.5s ease-in-out;
 }
 
 /* Knoppen */
@@ -33,7 +43,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    margin-top: 30px;
 }
 
 .game-button {
@@ -44,9 +53,17 @@ body {
     background-color: #4caf50;
     text-decoration: none;
     border-radius: 10px;
-    transition: transform 0.2s, background-color 0.2s;
+    transition: transform 0.2s, background-color 0.2s, box-shadow 0.2s;
+    animation: fadeIn 3s ease-in-out;
 }
 .game-button:hover {
     transform: scale(1.1);
     background-color: #388e3c;
+    box-shadow: 0 0 15px rgba(255,255,255,0.5);
+}
+
+/* Fade-in animatie */
+@keyframes fadeIn {
+    0% { opacity: 0; transform: translateY(-20px); }
+    100% { opacity: 1; transform: translateY(0); }
 }
