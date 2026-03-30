@@ -110,38 +110,33 @@ function moveLetters(){
 
 /* start level */
 function startLevel(){
-    lettersDiv.innerHTML="";
-    movingLetters=[];
-    index=0;
-    mistakes=0;
-    message.innerText="";
+    lettersDiv.innerHTML = "";
+    movingLetters = [];
+    index = 0;
+    mistakes = 0;
+    message.innerText = "";
 
-    // controleer of er nog een woord is
     if(current >= words.length) current = 0;
 
     let w = words[current];
 
-    // laat afbeelding zien
+    // pictogram zichtbaar maken
     wordImage.src = w.img;
     wordImage.style.display = "block";
 
-    updateProgress();
-    levelText.innerText = level;
-    speak("Zoek het woord");
-
+    // letters tonen
     let letters = getLettersForLevel(w.word);
-
-    letters.forEach(letter=>{
+    letters.forEach(letter => {
         let el = document.createElement("div");
-        el.className="letter";
+        el.className = "letter";
         el.innerText = letter;
         randomPosition(el);
-        el.onclick = ()=>eatLetter(el,letter);
+        el.onclick = ()=>eatLetter(el, letter);
         lettersDiv.appendChild(el);
         if(level >= 4) movingLetters.push(el);
     });
 
-    // start bewegen letters alleen als level 4+
+    // start letters bewegen in level 4+
     if(level >= 4) moveLetters();
 }
 
@@ -254,8 +249,9 @@ startBtn.onclick = ()=>{
     startLevel();
 };
 
-backBtn.onclick = ()=>{
-    game.style.display="none"; menu.style.display="flex";
+backBtn.onclick = () => {
+    game.style.display = "none";
+    menu.style.display = "flex";
 };
 
 /* start animatie trex en maak level buttons */
