@@ -35,3 +35,15 @@ h1 {
 .button:hover {
     background-color: #005bb5;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    background-image: url('jungle-background.jpg');
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
