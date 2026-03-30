@@ -220,3 +220,18 @@ body {
 .letter {
     transition: transform 0.2s;
 }
+startBtn.onclick = () => {
+    menu.style.display = "none";
+    game.style.display = "block";
+
+    level = 1;
+    current = 0;
+    score = 0;
+
+    startLevel();
+};
+
+backBtn.onclick = () => {
+    game.style.display = "none";
+    menu.style.display = "flex";
+};
