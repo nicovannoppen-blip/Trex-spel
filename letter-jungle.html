@@ -4,17 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Letter-jungle</title>
-<link rel="stylesheet" href="styleJungle.css">
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="game-container">
-        <h1>Letter-jungle</h1>
+        <h1>Letter-jungle 🌿</h1>
         <p id="target-word">Bouw het woord: <span id="word"></span></p>
         <p>Gevonden letters: <span id="collected"></span></p>
         <div id="letters-container"></div>
+        <p id="score">Score: 0</p>
         <p id="message"></p>
         <a href="index.html" class="button">Terug naar home</a>
     </div>
-<script src="scriptJungle.js"></script>
+
+    <!-- bewegende bladeren -->
+    <div id="leaves-container"></div>
+
+    <!-- geluiden -->
+    <audio id="correct-sound" src="correct.mp3"></audio>
+    <audio id="wrong-sound" src="wrong.mp3"></audio>
+
+<script src="script.js"></script>
 </body>
 </html>
