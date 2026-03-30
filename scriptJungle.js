@@ -15,6 +15,7 @@ const words = [
   "verstoppen", "schuilplaats", "luipaard", "kapokboom", "monkey", "boomvarken", 
   "rotsformatie", "rotsen", "natuur"
 ];
+
 let currentWord = "";
 let collected = "";
 let score = 0;
@@ -25,8 +26,24 @@ const collectedEl = document.getElementById("collected");
 const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
 const scoreEl = document.getElementById("score");
+
+// Geluiden blijven optioneel
 const correctSound = document.getElementById("correct-sound");
 const wrongSound = document.getElementById("wrong-sound");
+
+// Functie om tekst voor te lezen
+function speak(text) {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 1; // snelheid
+    utterance.pitch = 1; // toonhoogte
+    window.speechSynthesis.speak(utterance);
+}
+
+// 🎤 Leg uit hoe het spel werkt bij start
+function startGame() {
+    speak("Welkom bij Letter Jungle! Klik op de letters in de juiste volgorde om het woord te bouwen.");
+    setTimeout(newWord, 3000); // start eerste woord na uitleg
+}
 
 // Start een nieuw woord
 function newWord() {
@@ -36,6 +53,9 @@ function newWord() {
 
     currentWord = words[Math.floor(Math.random() * words.length)];
     wordEl.textContent = currentWord;
+
+    // Spreek het doelwoord uit
+    speak("Bouw het woord: " + currentWord.split("").join(" "));
 
     lettersContainer.innerHTML = "";
     let letters = currentWord.split("");
@@ -60,28 +80,33 @@ function newWord() {
 
 // Letter klikken
 function clickLetter(letter, btn) {
+    // Spreek de aangeklikte letter uit
+    speak(letter);
+
     if (currentWord[collected.length] === letter) {
         collected += letter;
         collectedEl.textContent = collected;
         btn.style.visibility = "hidden";
-        correctSound.play();
+        correctSound?.play();
 
         if (collected === currentWord) {
             messageEl.textContent = "Goed gedaan! 🎉";
+            speak("Goed gedaan!");
             score += 10;
             scoreEl.textContent = "Score: " + score;
             setTimeout(newWord, 1500);
         }
     } else {
         messageEl.textContent = "Fout! Probeer opnieuw.";
-        wrongSound.play();
+        speak("Fout! Probeer opnieuw.");
+        wrongSound?.play();
     }
 }
 
-// Start het eerste woord
-newWord();
+// Start spel
+startGame();
 
-// 🌿 Beweeg bladeren
+// 🌿 Bladeren animatie blijft zoals eerder
 const leavesContainer = document.getElementById("leaves-container");
 function createLeaf() {
     const leaf = document.createElement("div");
@@ -90,10 +115,6 @@ function createLeaf() {
     leaf.style.animationDuration = 5 + Math.random() * 5 + "s";
     leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
     leavesContainer.appendChild(leaf);
-
-    // Verwijder blad als animatie klaar is
     leaf.addEventListener("animationend", () => leaf.remove());
 }
-
-// Iedere 500ms een blad
 setInterval(createLeaf, 500);
