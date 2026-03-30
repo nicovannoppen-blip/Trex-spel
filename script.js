@@ -4,7 +4,13 @@ const wordImage = document.getElementById("wordImage");
 const progressEl = document.getElementById("progress");
 const scoreEl = document.getElementById("score");
 const message = document.getElementById("message");
+const menu = document.getElementById("menu");
+const game = document.getElementById("game");
+const startBtn = document.getElementById("startBtn");
+const backBtn = document.getElementById("backBtn");
 
+const levelText = document.getElementById("levelText");
+const levelFill = document.getElementById("levelFill");
 const reward = document.getElementById("reward");
 const starsEl = document.getElementById("stars");
 const nextBtn = document.getElementById("nextBtn");
