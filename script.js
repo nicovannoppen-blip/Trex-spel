@@ -52,7 +52,7 @@ let mistakes = 0;
 let level = 1;
 let movingLetters = [];
 
-/* 🎵 Geluid */
+/* geluid */
 function beep(freq){
     let ctx = new (window.AudioContext || window.webkitAudioContext)();
     let o = ctx.createOscillator();
@@ -62,14 +62,14 @@ function beep(freq){
     g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.2);
 }
 
-/* 🗣 Vrouwenstem */
+/* Vrouwenstem */
 function speak(text){
     let s = new SpeechSynthesisUtterance(text);
     let voices = speechSynthesis.getVoices();
     let femaleVoice = voices.find(v => v.lang.includes("nl") && v.name.toLowerCase().includes("female")) || voices.find(v => v.lang.includes("nl"));
     if(femaleVoice) s.voice = femaleVoice;
     s.lang = "nl-BE";
-    s.rate = 0.9; s.pitch = 1.2;
+    s.rate=0.9; s.pitch=1.2;
     speechSynthesis.cancel();
     speechSynthesis.speak(s);
 }
@@ -83,7 +83,7 @@ function randomPosition(el){
     el.style.top = y+"px";
 }
 
-/* letters voor levels */
+/* letters per level */
 function getLettersForLevel(word){
     let letters = word.split("");
     if(level===1) return letters;
@@ -95,7 +95,7 @@ function getLettersForLevel(word){
     return letters.sort(()=>Math.random()-0.5);
 }
 
-/* bewegende letters */
+/* bewegende letters level 4+ */
 function moveLetters(){
     movingLetters.forEach(el=>{
         let x = parseFloat(el.style.left);
@@ -110,34 +110,34 @@ function moveLetters(){
 
 /* start level */
 function startLevel(){
-    lettersDiv.innerHTML = "";
-    movingLetters = [];
-    index = 0;
-    mistakes = 0;
-    message.innerText = "";
+    lettersDiv.innerHTML="";
+    movingLetters=[];
+    index=0;
+    mistakes=0;
+    message.innerText="";
 
     if(current >= words.length) current = 0;
 
     let w = words[current];
+    wordImage.src=w.img;
+    wordImage.style.display="block";
 
-    // pictogram zichtbaar maken
-    wordImage.src = w.img;
-    wordImage.style.display = "block";
+    updateProgress();
+    levelText.innerText=level;
+    speak("Zoek het woord");
 
-    // letters tonen
     let letters = getLettersForLevel(w.word);
-    letters.forEach(letter => {
-        let el = document.createElement("div");
-        el.className = "letter";
-        el.innerText = letter;
+    letters.forEach(letter=>{
+        let el=document.createElement("div");
+        el.className="letter";
+        el.innerText=letter;
         randomPosition(el);
-        el.onclick = ()=>eatLetter(el, letter);
+        el.onclick=()=>eatLetter(el,letter);
         lettersDiv.appendChild(el);
-        if(level >= 4) movingLetters.push(el);
+        if(level>=4) movingLetters.push(el);
     });
 
-    // start letters bewegen in level 4+
-    if(level >= 4) moveLetters();
+    if(level>=4) moveLetters();
 }
 
 /* letters klikken */
@@ -171,7 +171,7 @@ function eatLetter(el, letter){
 /* confetti */
 function createConfetti(){
     for(let i=0;i<30;i++){
-        let c = document.createElement("div");
+        let c=document.createElement("div");
         c.className="confetti";
         c.style.left = Math.random()*100 + "vw";
         c.style.background = ["red","yellow","blue","green"][Math.floor(Math.random()*4)];
@@ -223,37 +223,33 @@ function animateTrex(){
     setTimeout(animateTrex,2000);
 }
 
-/* START / MENU */
+/* MENU */
 function createLevelButtons(){
     for(let i=1;i<=6;i++){
-        let btn = document.createElement("button");
+        let btn=document.createElement("button");
         btn.className="levelBtn";
         btn.innerText="Level "+i;
-       btn.onclick = ()=>{
-            level = i;
-            current = 0;
-            score = 0;
-            // reset score en UI
-            scoreEl.innerText = "⭐ " + score;
-            menu.style.display="none";
-            game.style.display="block";
+        btn.onclick = ()=>{
+            level=i; current=0; score=0;
+            scoreEl.innerText="⭐ "+score;
+            menu.style.display="none"; game.style.display="block";
             startLevel();
-        };
+        }
         levelButtonsContainer.appendChild(btn);
     }
 }
 
 startBtn.onclick = ()=>{
     level=1; current=0; score=0;
+    scoreEl.innerText="⭐ "+score;
     menu.style.display="none"; game.style.display="block";
     startLevel();
 };
 
-backBtn.onclick = () => {
-    game.style.display = "none";
-    menu.style.display = "flex";
+backBtn.onclick = ()=>{
+    game.style.display="none";
+    menu.style.display="flex";
 };
 
-/* start animatie trex en maak level buttons */
 animateTrex();
 createLevelButtons();
