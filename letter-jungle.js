@@ -106,7 +106,7 @@ function clickLetter(letter, btn) {
             speak("Fout! Probeer opnieuw.");
             wrongSound?.play();
         }
-    }, 2000);
+    }, 1000);
 }
 
 // Start spel
