@@ -41,7 +41,7 @@ function newWord() {
     let letters = currentWord.split("");
 
     // Voeg 3 willekeurige extra letters toe
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
     while (letters.length < currentWord.length + 3) {
         letters.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
     }
