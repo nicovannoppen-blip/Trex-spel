@@ -1,100 +1,120 @@
 body {
-    font-family: Arial, sans-serif;
-    background-image: url('jungle-background.jpg');
-    background-size: cover;
-    background-position: center;
     margin: 0;
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-}
-
-.game-container {
-    background: rgba(255, 255, 255, 0.85);
-    padding: 20px 40px;
-    border-radius: 12px;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: url('images/jungle-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
     text-align: center;
-    width: 90%;
-    max-width: 600px;
-    z-index: 2;
-    position: relative;
-    box-shadow: 0 0 20px rgba(0,0,0,0.3);
 }
 
-/* Woord groot en vet bij geraden letters */
+#title {
+    font-size: 3em;
+    margin-top: 20px;
+}
+
+#instruction {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+#game-container {
+    display: inline-block;
+    text-align: center;
+    margin-top: 20px;
+}
+
 #word {
-    font-size: 48px;
-    letter-spacing: 8px;
-    margin: 20px 0;
-    text-transform: none;
-}
-#word span.guessed {
-    font-weight: bold;
-    color: #4caf50;
-}
-#word span.unguessed {
-    font-weight: normal;
-    color: black;
+    font-size: 3em;
+    margin-bottom: 10px;
 }
 
-/* Letters container */
+.guessed {
+    font-weight: bold;
+}
+
+#collected {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
 #letters-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    margin: 20px 0;
-    position: relative;
+    gap: 10px;
 }
+
 .letter {
-    background-color: #4caf50;
-    color: white;
-    padding: 15px;
-    margin: 5px;
-    font-size: 24px;
-    font-weight: bold;
+    width: 50px;
+    height: 50px;
+    background-color: rgba(255,255,255,0.3);
     border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
     cursor: pointer;
-    transition: transform 0.2s;
+    user-select: none;
+    transition: all 0.2s;
 }
-.letter:hover { transform: scale(1.2); }
 
-/* Terug naar home knop */
-.button {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 12px 25px;
-    font-size: 16px;
-    background-color: #0070f3;
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
+.letter:hover {
+    transform: scale(1.2);
+    background-color: rgba(255,255,255,0.5);
 }
-.button:hover { background-color: #005bb5; }
 
-/* Bladeren animatie */
+#message {
+    font-size: 1.5em;
+    margin-top: 10px;
+}
+
+#score {
+    font-size: 1.5em;
+    margin-top: 15px;
+}
+
 #leaves-container {
-    position: absolute;
-    width: 100%;
-    height: 100%;
+    position: fixed;
     top: 0;
     left: 0;
+    width: 100%;
+    height: 100%;
     pointer-events: none;
-    z-index: 1;
+    overflow: hidden;
 }
+
 .leaf {
     position: absolute;
-    width: 40px;
-    height: 40px;
-    background-image: url('leaf.png');
-    background-size: cover;
-    opacity: 0.8;
+    width: 30px;
+    height: 30px;
+    background: url('images/leaf.png') no-repeat center center;
+    background-size: contain;
     animation-name: fall;
     animation-timing-function: linear;
 }
+
 @keyframes fall {
-    0% { transform: translateY(-50px) rotate(0deg); }
-    100% { transform: translateY(110vh) rotate(360deg); }
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+}
+
+/* Player selection buttons */
+#player-selection {
+    margin-top: 20px;
+}
+
+#player-selection button {
+    padding: 10px 20px;
+    margin: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 8px;
+    border: none;
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+}
+
+#player-selection button:hover {
+    background-color: rgba(0,0,0,0.7);
 }
