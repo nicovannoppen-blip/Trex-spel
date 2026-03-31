@@ -15,11 +15,18 @@ const words = [
   "verstoppen", "schuilplaats", "luipaard", "kapokboom", "monkey", "boomvarken", 
   "rotsformatie", "rotsen", "natuur"
 ];
- 
 
 let currentWord = "";
 let collected = "";
-let score = 0;
+
+// Profielen
+let profiles = {
+    "Odin": { score: 0 },
+    "Niel": { score: 0 }
+};
+// Profiel ophalen van homepagina
+let currentPlayer = localStorage.getItem("currentPlayer") || "Odin";
+let profiles = JSON.parse(localStorage.getItem("profiles")) || { "Odin": {score:0}, "Niel": {score:0} };
 
 const wordEl = document.getElementById("word");
 const collectedEl = document.getElementById("collected");
@@ -30,19 +37,59 @@ const scoreEl = document.getElementById("score");
 const correctSound = document.getElementById("correct-sound");
 const wrongSound = document.getElementById("wrong-sound");
 
+// -------------------- Player Selection --------------------
+const playerSelectionEl = document.createElement("div");
+playerSelectionEl.id = "player-selection";
+playerSelectionEl.innerHTML = `
+    <p>Wie speelt?</p>
+    <button id="odin-btn">Odin</button>
+    <button id="niel-btn">Niel</button>
+`;
+document.body.prepend(playerSelectionEl);
+
+document.getElementById("odin-btn").addEventListener("click", () => selectPlayer("Odin"));
+document.getElementById("niel-btn").addEventListener("click", () => selectPlayer("Niel"));
+
+function selectPlayer(name) {
+    currentPlayer = name;
+    playerSelectionEl.style.display = "none"; // verberg keuze
+    updateScoreDisplay();
+    startGame();
+}
+
+// -------------------- TTS --------------------
 function speak(text) {
     const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "nl-NL";
     utterance.rate = 1;
     utterance.pitch = 1;
     window.speechSynthesis.speak(utterance);
 }
 
+// Phonetic letters voor NL
+function speakLetterNL(letter) {
+    const phonetic = {
+        "a": "a", "b": "b", "c": "c", "d": "d", "e": "e", "f": "f",
+        "g": "g", "h": "h", "i": "i", "j": "j", "k": "k", "l": "l",
+        "m": "em", "n": "n", "o": "o", "p": "p", "q": "q", "r": "r",
+        "s": "s", "t": "t", "u": "u", "v": "v", "w": "w", "x": "x",
+        "y": "y", "z": "z"
+    };
+    const utterance = new SpeechSynthesisUtterance(phonetic[letter.toLowerCase()] || letter);
+    utterance.lang = "nl-NL";
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    window.speechSynthesis.speak(utterance);
+}
+
+// -------------------- Spel functies --------------------
 function updateWordDisplay() {
     wordEl.innerHTML = "";
     for (let i = 0; i < currentWord.length; i++) {
         const span = document.createElement("span");
         if (i < collected.length) {
             span.classList.add("guessed");
+            span.style.fontWeight = "bold"; // Vetgedrukte geraden letters
             span.textContent = currentWord[i];
         } else {
             span.classList.add("unguessed");
@@ -53,7 +100,7 @@ function updateWordDisplay() {
 }
 
 function startGame() {
-    speak("Welkom bij Letter Jungle! Klik op de letters in de juiste volgorde om het woord te bouwen.");
+    speak(`Welkom ${currentPlayer} bij Letter Jungle! Klik op de letters in de juiste volgorde om het woord te bouwen.`);
     setTimeout(newWord, 3000);
 }
 
@@ -85,7 +132,7 @@ function newWord() {
 }
 
 function clickLetter(letter, btn) {
-    speakLetterNL(letter); // nu correct in NL
+    speakLetterNL(letter); // uitspraak letter
 
     setTimeout(() => {
         if (currentWord[collected.length] === letter) {
@@ -97,9 +144,12 @@ function clickLetter(letter, btn) {
 
             if (collected === currentWord) {
                 messageEl.textContent = "Goed gedaan! 🎉";
+
+                // Score bijwerken van huidige speler
+                profiles[currentPlayer].score += 10;
+                updateScoreDisplay();
+
                 speak("Goed gedaan!");
-                score += 10;
-                scoreEl.textContent = "Score: " + score;
                 setTimeout(newWord, 1500);
             }
         } else {
@@ -110,48 +160,12 @@ function clickLetter(letter, btn) {
     }, 500);
 }
 
-function speakLetterNL(letter) {
-    // Map van letters die anders worden uitgesproken
-    const phonetic = {
-        "a": "aa",
-        "b": "bee",
-        "c": "see",
-        "d": "dee",
-        "e": "ee",
-        "f": "ef",
-        "g": "gee",
-        "h": "haa",
-        "i": "ie",
-        "j": "jee",
-        "k": "kaa",
-        "l": "el",
-        "m": "em",
-        "n": "en",
-        "o": "oo",
-        "p": "pee",
-        "q": "kuu",
-        "r": "er",
-        "s": "es",
-        "t": "tee",
-        "u": "uu",
-        "v": "vee",
-        "w": "wee",
-        "x": "iks",
-        "y": "ij",
-        "z": "zet"
-    };
-
-    const utterance = new SpeechSynthesisUtterance(phonetic[letter.toLowerCase()] || letter);
-    utterance.lang = "nl-NL"; // Nederlands
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    window.speechSynthesis.speak(utterance);
+function updateScoreDisplay() {
+localStorage.setItem("profiles", JSON.stringify(profiles));    
+scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-// Start spel
-startGame();
-
-// Bladeren animatie
+// -------------------- Start Bladeren animatie --------------------
 const leavesContainer = document.getElementById("leaves-container");
 function createLeaf() {
     const leaf = document.createElement("div");
