@@ -20,13 +20,11 @@ let currentWord = "";
 let collected = "";
 
 // Profielen
-let profiles = {
+let currentPlayer = localStorage.getItem("currentPlayer") || "Odin";
+let profiles = JSON.parse(localStorage.getItem("profiles")) || {
     "Odin": { score: 0 },
     "Niel": { score: 0 }
 };
-// Profiel ophalen van homepagina
-let currentPlayer = localStorage.getItem("currentPlayer") || "Odin";
-let profiles = JSON.parse(localStorage.getItem("profiles")) || { "Odin": {score:0}, "Niel": {score:0} };
 
 const wordEl = document.getElementById("word");
 const collectedEl = document.getElementById("collected");
