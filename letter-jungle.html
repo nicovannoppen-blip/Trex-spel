@@ -3,28 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Letter-jungle</title>
-<link rel="stylesheet" href="./letter-jungle.css">
+<title>Letter Jungle</title>
+<link rel="stylesheet" href="letter-jungle.css">
 </head>
+
 <body>
-    <div class="game-container">
-        <h1>Letter-jungle 🌿</h1>
-        <p id="target-word">Bouw het woord:</p>
-        <p id="word"></p>
-        <p>Gevonden letters: <span id="collected"></span></p>
-        <div id="letters-container"></div>
-        <p id="score">Score: 0</p>
-        <p id="message"></p>
-        <a href="index.html" class="button">Terug naar home</a>
+
+<div class="game-container">
+
+    <div id="player-selection">
+        <p>Wie speelt?</p>
+        <button id="odin-btn">Odin</button>
+        <button id="niel-btn">Niel</button>
     </div>
 
-    <!-- bladeren animatie -->
-    <div id="leaves-container"></div>
+    <h1>Letter-jungle 🌿</h1>
 
-    <!-- geluiden -->
-    <audio id="correct-sound" src="./sounds/correct.mp3"></audio>
-    <audio id="wrong-sound" src="./sounds/wrong.mp3"></audio>
+    <p>Bouw het woord:</p>
+    <p id="word"></p>
 
-<script src="./letter-jungle.js"></script>
+    <p>Gevonden letters: <span id="collected"></span></p>
+
+    <div id="letters-container"></div>
+
+    <p id="score">Score: 0</p>
+    <p id="message"></p>
+
+    <a href="index.html" class="button">⬅ Terug</a>
+
+</div>
+
+<div id="leaves-container"></div>
+
+<audio id="correct-sound" src="sounds/correct.mp3"></audio>
+<audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
+
+<script src="letter-jungle.js"></script>
+
 </body>
 </html>
