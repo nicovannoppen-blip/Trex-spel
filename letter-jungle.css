@@ -125,6 +125,9 @@ body {
     display: inline-block;
     margin-top: 50px;
 
+    max-width: 600px;
+    width: 90%;
+    border: 2px solid rgba(255,255,255,0.2);
     /* extra mooi effect */
     backdrop-filter: blur(8px);
     box-shadow: 0 0 20px rgba(0, 0, 0,0.5);
