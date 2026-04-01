@@ -1,34 +1,37 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jungle Spellen 🌿</title>
-    <link rel="stylesheet" href="./home.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jungle Spellen</title>
+<link rel="stylesheet" href="home.css">
 </head>
-<body>
-    <h1>Welkom!</h1>
 
-    <!-- Speler selectie -->
+<body>
+<div class="container">
+
+    <h1>Welkom 🌿</h1>
+
     <div id="player-selection">
-        <p>Kies je speler:</p>
-        <button id="odin-btn">Odin</button>
-        <button id="niel-btn">Niel</button>
+        <p>Wie speelt?</p>
+        <button class="button" id="odin-btn">Odin</button>
+        <button class="button" id="niel-btn">Niel</button>
     </div>
 
     <div id="current-player" style="display:none;">
-        <p>Huidige speler: <span id="player-name"></span></p>
-        <p>Score: <span id="player-score">0</span></p>
+        <p>Speler: <span id="player-name"></span></p>
+        <p>Score: <span id="player-score"></span></p>
     </div>
 
-    <p>Kies een spel om te spelen:</p>
-    <div id="games">
-            <a href="letters.html" class="game-button">Letters klikken 🦖</a>
-            <a href="letter-jungle.html" class="game-button">Letters jungle 🌿</a>
-            <a href="avontuur.html" class="game-button">Avontuur 🦕</a>
-            <a href="schieten.html" class="game-button">Schieten 🔫</a>
-    </div>
+    <p>Kies een spel:</p>
 
-    <script src="./home.js"></script>
+    <a href="letters.html" class="button">🦖 Letters klikken</a>
+    <a href="letter-jungle.html" class="button">🌿 Letter-jungle</a>
+    <a href="avontuur.html" class="button">🦕 Avontuur</a>
+    <a href="schieten.html" class="button">🎯 Schieten</a>
+
+</div>
+
+<script src="home.js"></script>
 </body>
 </html>
