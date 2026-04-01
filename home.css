@@ -41,3 +41,20 @@ h1 {
     margin-top: 20px;
     font-size: 1.3em;
 }
+
+.game-button {
+    display: inline-block;
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(0,0,0,0.5);
+    text-decoration: none; /* ❗ haalt onderlijning weg */
+    border-radius: 10px;
+    transition: 0.2s;
+}
+
+.game-button:hover {
+    background-color: rgba(0,0,0,0.7);
+    transform: scale(1.05);
+}
