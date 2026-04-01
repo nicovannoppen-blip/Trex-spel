@@ -36,14 +36,7 @@ const correctSound = document.getElementById("correct-sound");
 const wrongSound = document.getElementById("wrong-sound");
 
 // -------------------- Player Selection --------------------
-const playerSelectionEl = document.createElement("div");
-playerSelectionEl.id = "player-selection";
-playerSelectionEl.innerHTML = `
-    <p>Wie speelt?</p>
-    <button id="odin-btn">Odin</button>
-    <button id="niel-btn">Niel</button>
-`;
-document.body.prepend(playerSelectionEl);
+const playerSelectionEl = document.getElementById("player-selection");
 
 document.getElementById("odin-btn").addEventListener("click", () => selectPlayer("Odin"));
 document.getElementById("niel-btn").addEventListener("click", () => selectPlayer("Niel"));
