@@ -1,41 +1,43 @@
-// Profielen Odin en Niel
-let profiles = {
+// Profielen laden of maken
+let profiles = JSON.parse(localStorage.getItem("profiles")) || {
     "Odin": { score: 0 },
     "Niel": { score: 0 }
 };
 
-let currentPlayer = "";
+let currentPlayer = localStorage.getItem("currentPlayer") || "";
 
+// Elements
 const playerSelectionEl = document.getElementById("player-selection");
 const currentPlayerEl = document.getElementById("current-player");
 const playerNameEl = document.getElementById("player-name");
 const playerScoreEl = document.getElementById("player-score");
 
-document.getElementById("odin-btn").addEventListener("click", () => selectPlayer("Odin"));
-document.getElementById("niel-btn").addEventListener("click", () => selectPlayer("Niel"));
+// Knoppen
+document.getElementById("odin-btn").onclick = () => selectPlayer("Odin");
+document.getElementById("niel-btn").onclick = () => selectPlayer("Niel");
 
 function selectPlayer(name) {
     currentPlayer = name;
+
+    localStorage.setItem("currentPlayer", currentPlayer);
+    localStorage.setItem("profiles", JSON.stringify(profiles));
+
     playerSelectionEl.style.display = "none";
     currentPlayerEl.style.display = "block";
-    updateScoreDisplay();
+
+    updateUI();
 }
 
-// Update score op homepagina
-function updateScoreDisplay() {
+function updateUI() {
+    if (!currentPlayer) return;
+
     playerNameEl.textContent = currentPlayer;
     playerScoreEl.textContent = profiles[currentPlayer].score;
 }
 
-// Score bijwerken vanuit spellen
-function setScore(newScore) {
-    if (currentPlayer) {
-        profiles[currentPlayer].score = newScore;
-        updateScoreDisplay();
-    }
+// Bij laden pagina
+if (currentPlayer) {
+    playerSelectionEl.style.display = "none";
+    currentPlayerEl.style.display = "block";
+    updateUI();
 }
-
-// Optioneel: localStorage om score tussen pagina's te bewaren
-// Bijv. bij redirect naar spellen kun je currentPlayer en score opslaan
-localStorage.setItem("profiles", JSON.stringify(profiles));
-localStorage.setItem("currentPlayer", currentPlayer);
