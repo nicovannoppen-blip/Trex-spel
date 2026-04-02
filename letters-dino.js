@@ -1,76 +1,86 @@
-// ---------- WOORDEN + PICTOGRAMMEN ----------
+// -------------------- DATA --------------------
 const words = [
-    { word: "kat", img:"assets/kat.png" },
-    { word: "vis", img:"assets/vis.png" },
-    { word: "boom", img:"assets/boom.png" },
-    { word: "hond", img:"assets/hond.png" }
+    {word:"kat", img:"assets/kat.png"},
+    {word:"vis", img:"assets/vis.png"},
+    {word:"boom", img:"assets/boom.png"},
+    {word:"hond", img:"assets/hond.png"}
 ];
 
 let currentWord = "";
 let collected = "";
-let currentPlayer = null;
-let profiles = JSON.parse(localStorage.getItem("profiles")) || { Odin:{score:0}, Niel:{score:0} };
 
-// ---------- ELEMENTEN ----------
-const playerSelectionEl = document.getElementById("player-selection");
-const wordDisplayEl = document.getElementById("word-display");
+// -------------------- ELEMENTEN --------------------
+const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
 const scoreEl = document.getElementById("score");
 const wordImageEl = document.getElementById("word-image");
-const trex = document.getElementById("trex");
-const correctSound = document.getElementById("correct-sound");
-const wrongSound = document.getElementById("wrong-sound");
 
-// ---------- PROFIELKEUZE ----------
-document.getElementById("player1-btn").onclick = ()=>selectPlayer("Odin");
-document.getElementById("player2-btn").onclick = ()=>selectPlayer("Niel");
+const trex = document.getElementById("trex");
+
+const playerSelectionEl = document.getElementById("player-selection");
+
+// -------------------- PROFIELEN --------------------
+let profiles = JSON.parse(localStorage.getItem("profiles")) || {
+    "Odin": { score: 0 },
+    "Niel": { score: 0 }
+};
+
+let currentPlayer = localStorage.getItem("currentPlayer");
+
+// -------------------- SPELER KIEZEN --------------------
+document.getElementById("odin-btn").onclick = () => selectPlayer("Odin");
+document.getElementById("niel-btn").onclick = () => selectPlayer("Niel");
 
 function selectPlayer(name){
     currentPlayer = name;
-    localStorage.setItem("currentPlayer", currentPlayer);
+    localStorage.setItem("currentPlayer", name);
     playerSelectionEl.style.display = "none";
     startGame();
 }
 
-// Als speler al gekozen is → direct starten
-const savedPlayer = localStorage.getItem("currentPlayer");
-if(savedPlayer){
-    currentPlayer = savedPlayer;
+if(currentPlayer){
     playerSelectionEl.style.display = "none";
     startGame();
 }
 
-// ---------- TTS ----------
+// -------------------- SPRAAK --------------------
 function speak(text){
     const u = new SpeechSynthesisUtterance(text);
-    u.lang="nl-NL";
-    u.rate = 1;
-    u.pitch = 1;
-    window.speechSynthesis.speak(u);
+    u.lang = "nl-NL";
+    speechSynthesis.cancel();
+    speechSynthesis.speak(u);
 }
 
-// Phonetic letters
 function speakLetterNL(letter){
     const phonetic = {
-        "a": "a", "b": "b", "c": "c", "d": "d", "e": "e", "f": "f",
-        "g": "g", "h": "h", "i": "i", "j": "j", "k": "k", "l": "l",
-        "m": "em", "n": "n", "o": "o", "p": "p", "q": "q", "r": "r",
-        "s": "s", "t": "t", "u": "u", "v": "v", "w": "w", "x": "x",
-        "y": "y", "z": "z"
+        "m":"em","n":"n","b":"b","p":"p","t":"t","k":"k"
     };
-    const u = new SpeechSynthesisUtterance(phonetic[letter.toLowerCase()]||letter);
-    u.lang="nl-NL"; u.rate=1; u.pitch=1;
-    window.speechSynthesis.speak(u);
+    const u = new SpeechSynthesisUtterance(phonetic[letter] || letter);
+    u.lang = "nl-NL";
+    speechSynthesis.speak(u);
 }
 
-// ---------- SPEL FUNCTIES ----------
-function startGame(){
-    updateScore();
-    speak(`Welkom ${currentPlayer}! Klik op de letters in de juiste volgorde om het woord te bouwen.`);
-    setTimeout(newWord, 2000);
+// -------------------- WOORD TONEN --------------------
+function updateWordDisplay(){
+    wordEl.innerHTML = "";
+
+    for(let i=0;i<currentWord.length;i++){
+        const span = document.createElement("span");
+
+        if(i < collected.length){
+            span.textContent = currentWord[i];
+            span.classList.add("guessed");
+        } else {
+            span.textContent = "_";
+        }
+
+        wordEl.appendChild(span);
+        wordEl.appendChild(document.createTextNode(" "));
+    }
 }
 
+// -------------------- NIEUW WOORD --------------------
 function newWord(){
     collected = "";
     messageEl.textContent = "";
@@ -78,6 +88,7 @@ function newWord(){
 
     const w = words[Math.floor(Math.random()*words.length)];
     currentWord = w.word;
+
     wordImageEl.src = w.img;
 
     updateWordDisplay();
@@ -85,114 +96,74 @@ function newWord(){
     let letters = currentWord.split("");
 
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    let distractors = [];
+    let extra = [];
 
-    while(distractors.length < 3){
+    while(extra.length < 3){
         const l = alphabet[Math.floor(Math.random()*alphabet.length)];
-        if(!letters.includes(l) && !distractors.includes(l)){
-            distractors.push(l);
+        if(!letters.includes(l)){
+            extra.push(l);
         }
     }
 
-    letters = [...letters, ...distractors];
-
-    // SHUFFLE (betere versie)
-    for (let i = letters.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [letters[i], letters[j]] = [letters[j], letters[i]];
-    }
-
-    // DEBUG (optioneel)
-    console.log("Letters:", letters);
+    letters = letters.concat(extra);
+    letters.sort(()=>Math.random()-0.5);
 
     letters.forEach(l=>{
         const btn = document.createElement("div");
-        btn.textContent = l;
         btn.className = "letter";
+        btn.textContent = l;
 
-        btn.onclick = () => clickLetter(l, btn);
+        btn.onclick = ()=>clickLetter(l, btn);
 
         lettersContainer.appendChild(btn);
     });
 }
 
-// Klik letter
+// -------------------- LETTER KLIK --------------------
 function clickLetter(letter, btn){
     speakLetterNL(letter);
 
-    setTimeout(()=>{
-        if(currentWord[collected.length]===letter){
-            collected += letter;
-            correctSound.play();
-            updateWordDisplay();
+    if(letter === currentWord[collected.length]){
+        collected += letter;
+        btn.style.visibility = "hidden";
 
-            if(collected===currentWord){
-                messageEl.textContent="Goed gedaan! 🎉";
-                speak("Goed gedaan!");
-                profiles[currentPlayer].score += 10;
-                localStorage.setItem("profiles", JSON.stringify(profiles));
-                updateScore();
-                setTimeout(newWord, 1500);
-            }
-        } else {
-            messageEl.textContent="Fout! Probeer opnieuw.";
-            speak("Fout! Probeer opnieuw.");
-            wrongSound.play();
+        updateWordDisplay();
+
+        if(collected === currentWord){
+            messageEl.textContent = "Goed gedaan!";
+            profiles[currentPlayer].score += 10;
+            localStorage.setItem("profiles", JSON.stringify(profiles));
+            updateScore();
+
+            speak("Goed gedaan!");
+            setTimeout(newWord, 1500);
         }
-    }, 300);
-}
-
-// Update underscores en ingevulde letters
-function updateWordDisplay(){
-    wordDisplayEl.innerHTML = "";
-    for(let i=0;i<currentWord.length;i++){
-        const span = document.createElement("span");
-        span.textContent = i<collected.length ? currentWord[i] : "_";
-        span.classList.add(i<collected.length ? "guessed" : "");
-        wordDisplayEl.appendChild(span);
-        wordDisplayEl.appendChild(document.createTextNode(" ")); // spatie
+    } else {
+        messageEl.textContent = "Fout!";
+        speak("Fout");
     }
 }
 
+// -------------------- SCORE --------------------
 function updateScore(){
-    scoreEl.textContent=`${currentPlayer} score: ${profiles[currentPlayer].score}`;
+    scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-// ---------- KNOPPEN ----------
-document.getElementById("back-btn").onclick = ()=>{
-    window.location.href="index.html";
-};
+// -------------------- START --------------------
+function startGame(){
+    updateScore();
+    speak(`Welkom ${currentPlayer}. Klik de letters in de juiste volgorde.`);
+    setTimeout(newWord, 1500);
+}
 
-document.getElementById("switch-btn").onclick = ()=>{
-    localStorage.removeItem("currentPlayer");
-    location.reload();
-};
-
-// ---------- DINO VOLGT MUIS ----------
+// -------------------- DINO VOLGEN --------------------
 document.addEventListener("click", e=>{
-    trex.style.left = e.clientX+"px";
-    trex.style.top = e.clientY+"px";
+    trex.style.left = e.clientX + "px";
+    trex.style.top = e.clientY + "px";
 });
 
-// ---------- TREX ANIMATIE ----------
-const trexFrames = ["assets/trex1.png","assets/trex2.png"];
-let frame = 0;
-function animateTrex(){
-    frame = (frame+1)%2;
-    trex.src = trexFrames[frame];
-    setTimeout(animateTrex, 500);
+// -------------------- WISSEL SPELER --------------------
+function switchPlayer(){
+    localStorage.removeItem("currentPlayer");
+    location.reload();
 }
-animateTrex();
-
-// ---------- BLADEREN ANIMATIE ----------
-const leavesContainer = document.getElementById("leaves-container");
-function createLeaf(){
-    const leaf = document.createElement("div");
-    leaf.className="leaf";
-    leaf.style.left=Math.random()*window.innerWidth+"px";
-    leaf.style.animationDuration=5+Math.random()*5+"s";
-    leaf.style.transform=`rotate(${Math.random()*360}deg)`;
-    leavesContainer.appendChild(leaf);
-    leaf.addEventListener("animationend", ()=>leaf.remove());
-}
-setInterval(createLeaf, 500);
