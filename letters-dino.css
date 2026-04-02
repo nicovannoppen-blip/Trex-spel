@@ -34,9 +34,7 @@ h1 { font-size: 2.5em; margin-bottom: 15px; }
     position: relative;
     z-index: 5; /* BELANGRIJK */
 }
-#letters-container {
-    background: red;
-}
+
 
 .letter {
     width: 60px;
