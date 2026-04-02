@@ -76,35 +76,42 @@ function newWord(){
     messageEl.textContent = "";
     lettersContainer.innerHTML = "";
 
-    // kies random woord
     const w = words[Math.floor(Math.random()*words.length)];
     currentWord = w.word;
     wordImageEl.src = w.img;
 
-    // underscores onder pictogram
     updateWordDisplay();
 
-    // Letters van het woord
     let letters = currentWord.split("");
 
-    // Voeg 3 letters toe die niet in het woord zitten
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
     let distractors = [];
+
     while(distractors.length < 3){
         const l = alphabet[Math.floor(Math.random()*alphabet.length)];
         if(!letters.includes(l) && !distractors.includes(l)){
             distractors.push(l);
         }
     }
-    letters = letters.concat(distractors);
-    letters.sort(()=>Math.random()-0.5);
 
-    // Voeg letters toe aan container
+    letters = [...letters, ...distractors];
+
+    // SHUFFLE (betere versie)
+    for (let i = letters.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [letters[i], letters[j]] = [letters[j], letters[i]];
+    }
+
+    // DEBUG (optioneel)
+    console.log("Letters:", letters);
+
     letters.forEach(l=>{
         const btn = document.createElement("div");
         btn.textContent = l;
         btn.className = "letter";
-        btn.addEventListener("click", ()=>clickLetter(l, btn));
+
+        btn.onclick = () => clickLetter(l, btn);
+
         lettersContainer.appendChild(btn);
     });
 }
