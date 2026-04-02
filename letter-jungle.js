@@ -89,10 +89,28 @@ function updateWordDisplay(){
 
     for(let i=0;i<currentWord.length;i++){
         const span = document.createElement("span");
+        function updateWordDisplay(){
+    wordDisplayEl.innerHTML = "";
+
+    for(let i = 0; i < currentWord.length; i++){
+        const span = document.createElement("span");
 
         if(i < collected.length){
             span.textContent = currentWord[i];
-            span.classList.add("guessed"); // alleen hier toevoegen
+            span.classList.add("guessed");
+        } else {
+            span.textContent = "_";
+        }
+
+        wordDisplayEl.appendChild(span);
+
+        // spatie tussen letters
+        const space = document.createTextNode(" ");
+        wordDisplayEl.appendChild(space);
+          }
+        }      
+        if(i < collected.length){
+            span.textContent = currentWord[i];
         } else {
             span.textContent = "_";
         }
