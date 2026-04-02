@@ -179,3 +179,8 @@ function createLeaf() {
     leaf.addEventListener("animationend", () => leaf.remove());
 }
 setInterval(createLeaf, 500);
+//----------------------wisselen speler---------------
+function switchPlayer() {
+    localStorage.removeItem("currentPlayer");
+    location.reload();
+}
