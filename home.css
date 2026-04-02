@@ -30,8 +30,10 @@ h1 {
 /* Buttons algemeen */
 .button {
     display: block;
+    width: 100%;
+    max-width: 300px;
+    margin: 10px auto;
     padding: 15px;
-    margin: 10px 0;
     font-size: 18px;
     border-radius: 12px;
     border: none;
