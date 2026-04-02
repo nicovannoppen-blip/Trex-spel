@@ -3,40 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🦖 Dino Letters</title>
-<link rel="stylesheet" href="letter-jungle.css">
+<title>🦖 T-Rex Leerspel</title>
+<link rel="stylesheet" href="letters-dino.css">
 </head>
 
 <body>
 
 <div class="game-container">
 
+    <!-- Profielkeuze -->
     <div id="player-selection">
         <p>Wie speelt?</p>
-        <button id="odin-btn">Odin</button>
-        <button id="niel-btn">Niel</button>
+        <button id="player1-btn">Odin</button>
+        <button id="player2-btn">Niel</button>
     </div>
 
-    <h1>Dino Letters 🦖</h1>
+    <h1>🦖 T-Rex Leerspel</h1>
 
-    <p>Klik de letters:</p>
+    <p>Bouw het woord:</p>
+    <div id="target-pictogram">
+        <img id="word-image" src="">
+    </div>
 
-    <!-- NIEUW -->
-    <img id="word-image" style="width:120px; margin:10px 0;">
-
-    <p id="word"></p>
-    <p>Gevonden letters: <span id="collected"></span></p>
-
-    <!-- DINO -->
-    <img id="trex" src="assets/trex1.png" style="width:80px; position:absolute;">
-
+    <div id="word-display"></div>
+    <div id="collected-display"></div>
     <div id="letters-container"></div>
 
     <p id="score">Score: 0</p>
     <p id="message"></p>
 
-    <a href="index.html" class="button">⬅ Terug</a>
-    <button onclick="switchPlayer()" class="button">🔄 Wissel speler</button>
+    <button id="back-btn" class="button">⬅ Terug</button>
+    <button id="switch-btn" class="button">🔄 Wissel speler</button>
+
+    <img id="trex" src="assets/trex1.png">
 
 </div>
 
@@ -46,6 +45,5 @@
 <audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
 
 <script src="letters-dino.js"></script>
-
 </body>
 </html>
