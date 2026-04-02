@@ -1,4 +1,4 @@
-// Profielen laden of maken
+// Profielen laden
 let profiles = JSON.parse(localStorage.getItem("profiles")) || {
     "Odin": { score: 0 },
     "Niel": { score: 0 }
@@ -13,9 +13,18 @@ const playerNameEl = document.getElementById("player-name");
 const playerScoreEl = document.getElementById("player-score");
 
 // Knoppen
-document.getElementById("odin-btn").onclick = () => selectPlayer("Odin");
-document.getElementById("niel-btn").onclick = () => selectPlayer("Niel");
+const odinBtn = document.getElementById("odin-btn");
+const nielBtn = document.getElementById("niel-btn");
+const switchBtn = document.getElementById("switch-player");
+const resetBtn = document.getElementById("reset-scores");
 
+// Events
+odinBtn.onclick = () => selectPlayer("Odin");
+nielBtn.onclick = () => selectPlayer("Niel");
+switchBtn.onclick = switchPlayer;
+resetBtn.onclick = resetScores;
+
+// Speler kiezen
 function selectPlayer(name) {
     currentPlayer = name;
 
@@ -28,6 +37,7 @@ function selectPlayer(name) {
     updateUI();
 }
 
+// UI update
 function updateUI() {
     if (!currentPlayer) return;
 
@@ -35,7 +45,28 @@ function updateUI() {
     playerScoreEl.textContent = profiles[currentPlayer].score;
 }
 
-// Bij laden pagina
+// 🔄 Wissel speler
+function switchPlayer() {
+    currentPlayer = "";
+    localStorage.removeItem("currentPlayer");
+
+    playerSelectionEl.style.display = "block";
+    currentPlayerEl.style.display = "none";
+}
+
+// 🗑 Reset scores
+function resetScores() {
+    profiles = {
+        "Odin": { score: 0 },
+        "Niel": { score: 0 }
+    };
+
+    localStorage.setItem("profiles", JSON.stringify(profiles));
+
+    updateUI();
+}
+
+// Bij laden
 if (currentPlayer) {
     playerSelectionEl.style.display = "none";
     currentPlayerEl.style.display = "block";
