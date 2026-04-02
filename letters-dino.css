@@ -30,21 +30,27 @@ h1 { font-size: 2.5em; margin-bottom: 15px; }
     justify-content: center;
     gap: 12px;
     margin-top: 20px;
-    min-height: 80px; /* belangrijk: zorgt dat hij zichtbaar is */
+    min-height: 100px;
+    position: relative;
+    z-index: 5; /* BELANGRIJK */
+}
+#letters-container {
+    background: red;
 }
 
 .letter {
     width: 60px;
     height: 60px;
-    background: rgba(255,255,255,0.9); /* WIT zodat zichtbaar */
-    color: black; /* belangrijk! */
+    background: white;          /* VOLLEDIG wit */
+    color: black;               /* zwarte letters */
     border-radius: 12px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 26px;
+    font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    border: 2px solid #333;     /* extra zichtbaar */
     transition: 0.2s;
 }
 
@@ -85,6 +91,7 @@ h1 { font-size: 2.5em; margin-bottom: 15px; }
     left: 50px;
     top: 50px;
     transition: 0.2s;
+    z-index: 1; /* lager dan letters */
 }
 
 #leaves-container { position: fixed; width: 100%; height: 100%; pointer-events: none; }
