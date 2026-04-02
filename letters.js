@@ -13,33 +13,37 @@ const game = document.getElementById("game");
 
 const startBtn = document.getElementById("startBtn");
 const menuBtn = document.getElementById("menuBtn");
-const resetBtn = document.getElementById("resetBtn");
+const playerBtn = document.getElementById("playerBtn");
 
 const levelText = document.getElementById("levelText");
 const levelButtonsContainer = document.getElementById("levelButtons");
 
+/* woorden */
 let words = [
     {word:"kat", img:"assets/kat.png"},
     {word:"vis", img:"assets/vis.png"},
     {word:"boom", img:"assets/boom.png"},
-    {word:"hond", img:"assets/hond.png"},
-    {word:"fiets", img:"assets/fiets.png"}
+    {word:"hond", img:"assets/hond.png"}
 ];
 
 let current=0, index=0, score=0, mistakes=0, level=1;
 
-/* geluid */
-function beep(freq){
-    let ctx = new AudioContext();
-    let o = ctx.createOscillator();
-    let g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.frequency.value=freq;
-    o.start();
-    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.2);
+/* 🔊 PHONETIC LETTERS */
+function speakLetterNL(letter) {
+    const phonetic = {
+        "a":"a","b":"b","c":"c","d":"d","e":"e","f":"f",
+        "g":"g","h":"h","i":"i","j":"j","k":"k","l":"l",
+        "m":"em","n":"n","o":"o","p":"p","q":"q","r":"r",
+        "s":"s","t":"t","u":"u","v":"v","w":"w","x":"x",
+        "y":"y","z":"z"
+    };
+    const utterance = new SpeechSynthesisUtterance(phonetic[letter.toLowerCase()] || letter);
+    utterance.lang = "nl-NL";
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utterance);
 }
 
-/* spraak */
+/* algemene spraak */
 function speak(text){
     let s=new SpeechSynthesisUtterance(text);
     s.lang="nl-BE";
@@ -55,19 +59,17 @@ function randomPosition(el){
     el.style.top = y+"px";
 }
 
-/* level letters */
-function getLetters(word){
-    let letters=word.split("");
-    return level===1 ? letters : letters.sort(()=>Math.random()-0.5);
-}
-
-/* start */
+/* start spel */
 function startGame(){
     menu.style.display="none";
     game.style.display="block";
+
+    speak("Zoek de letters in de juiste volgorde om het woord te maken");
+
     startLevel();
 }
 
+/* start level */
 function startLevel(){
     lettersDiv.innerHTML="";
     index=0;
@@ -76,10 +78,12 @@ function startLevel(){
     let w = words[current];
     wordImage.src = w.img;
 
-    updateProgress();
     levelText.innerText=level;
+    updateProgress();
 
-    getLetters(w.word).forEach(letter=>{
+    let letters = w.word.split("").sort(()=>Math.random()-0.5);
+
+    letters.forEach(letter=>{
         let el=document.createElement("div");
         el.className="letter";
         el.innerText=letter;
@@ -94,19 +98,22 @@ function startLevel(){
                 setTimeout(()=>el.remove(),200);
                 index++;
                 score+=10;
-                beep(600);
-                speak(letter);
+
+                speakLetterNL(letter);
                 updateProgress();
 
                 if(index===w.word.length){
-                    showReward();
+                    setTimeout(()=>{
+                        speak("Goed gedaan!");
+                        showReward();
+                    },500);
                 }
             } else {
                 score-=5;
                 mistakes++;
                 trex.classList.add("shake");
                 setTimeout(()=>trex.classList.remove("shake"),200);
-                beep(200);
+                speak("fout");
             }
 
             scoreEl.innerText="⭐ "+score;
@@ -133,7 +140,7 @@ function showReward(){
     starsEl.innerText="⭐".repeat(stars);
 }
 
-/* next */
+/* volgende */
 nextBtn.onclick=()=>{
     reward.style.display="none";
     current++;
@@ -141,42 +148,41 @@ nextBtn.onclick=()=>{
     if(current>=words.length){
         current=0;
         level++;
+        speak("Level "+level);
     }
 
     startLevel();
 };
 
-/* menu */
+/* menu = terug naar levels */
 menuBtn.onclick=()=>{
     game.style.display="none";
     reward.style.display="none";
     menu.style.display="flex";
 };
 
-/* reset */
-resetBtn.onclick=()=>{
-    score=0;
-    current=0;
-    level=1;
-    scoreEl.innerText="⭐ 0";
-    startLevel();
+/* wissel speler */
+playerBtn.onclick=()=>{
+    localStorage.removeItem("player");
+    location.reload();
 };
 
-/* start */
+/* start knop */
 startBtn.onclick=startGame;
 
 /* level knoppen */
 function createLevels(){
-    levelButtonsContainer.innerHTML="";
     for(let i=1;i<=5;i++){
         let btn=document.createElement("button");
         btn.innerText="Level "+i;
+
         btn.onclick=()=>{
             level=i;
             current=0;
             score=0;
             startGame();
         };
+
         levelButtonsContainer.appendChild(btn);
     }
 }
