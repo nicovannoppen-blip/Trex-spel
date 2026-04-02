@@ -179,3 +179,14 @@ function switchPlayer() {
     localStorage.removeItem("currentPlayer");
     location.reload();
 }
+
+// Voeg dit onderaan letters-dino.js toe
+document.querySelectorAll(".button").forEach(btn => {
+    if(btn.textContent.includes("Wissel speler")) {
+        btn.addEventListener("click", () => {
+            localStorage.removeItem("currentPlayer");
+            // Toon speler selectie
+            document.getElementById("player-selection").style.display = "block";
+        });
+    }
+});
