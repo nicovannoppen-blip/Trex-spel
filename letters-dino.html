@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🦖 T-Rex Leerspel</title>
+<title>🦖 Dino Letters</title>
 <link rel="stylesheet" href="letters-dino.css">
 </head>
 
@@ -11,44 +11,33 @@
 
 <div class="game-container">
 
-    <!-- Profielkeuze -->
     <div id="player-selection">
         <p>Wie speelt?</p>
-        <button id="player1-btn">Odin</button>
-        <button id="player2-btn">Niel</button>
+        <button id="odin-btn">Odin</button>
+        <button id="niel-btn">Niel</button>
     </div>
 
-    <h1>🦖 T-Rex Leerspel</h1>
+    <h1>Dino Letters 🦖</h1>
 
-    <p>Bouw het woord:</p>
-    <div id="target-pictogram">
-        <img id="word-image" src="">
-    </div>
+    <img id="word-image" src="" alt="pictogram">
 
-    <!-- Onder pictogram: underscores -->
-    <div id="word-display"></div>
+    <p id="word"></p>
 
     <div id="letters-container"></div>
 
-    <p id="score">Score: 0</p>
-    <p id="word"></p>
-<div id="letters-container"></div>
-<img id="word-image">
-<p id="message"></p>
-<p id="score"></p>
-<img id="trex" src="assets/trex.png">
-    <button id="back-btn" class="button">⬅ Terug</button>
-    <button id="switch-btn" class="button">🔄 Wissel speler</button>
+    <p id="score"></p>
+    <p id="message"></p>
 
-    <img id="trex" src="assets/trex1.png">
+    <a href="index.html" class="button">⬅ Terug</a>
+    <button id="switch-btn" class="button">🔄 Wissel speler</button>
 
 </div>
 
+<img id="trex" src="assets/trex1.png">
+
 <div id="leaves-container"></div>
 
-<audio id="correct-sound" src="sounds/correct.mp3"></audio>
-<audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
-
 <script src="letters-dino.js"></script>
+
 </body>
 </html>
