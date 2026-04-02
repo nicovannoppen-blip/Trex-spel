@@ -106,31 +106,56 @@ function startGame() {
     setTimeout(newWord, 3000);
 }
 
-function newWord() {
-    collected = "";
-    collectedEl.textContent = collected;
-    messageEl.textContent = "";
+function newWord(){
+    console.log("newWord gestart");
 
-    currentWord = words[Math.floor(Math.random() * words.length)];
+    collected = "";
+    messageEl.textContent = "";
+    lettersContainer.innerHTML = "";
+
+    // kies woord
+    const w = words[Math.floor(Math.random()*words.length)];
+    currentWord = w.word;
+
+    console.log("woord:", currentWord);
+
+    wordImageEl.src = w.img;
+
     updateWordDisplay();
 
-    speak("Bouw het woord: " + currentWord);
-
-    lettersContainer.innerHTML = "";
     let letters = currentWord.split("");
-    const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    while (letters.length < currentWord.length + 3) {
-        letters.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
-    }
-    letters = letters.sort(() => Math.random() - 0.5);
 
-    letters.forEach(l => {
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+    let distractors = [];
+
+    while(distractors.length < 3){
+        const l = alphabet[Math.floor(Math.random()*alphabet.length)];
+        if(!letters.includes(l) && !distractors.includes(l)){
+            distractors.push(l);
+        }
+    }
+
+    letters = letters.concat(distractors);
+
+    console.log("letters:", letters);
+
+    // shuffle
+    letters.sort(()=>Math.random()-0.5);
+
+    // MAKEN KNOPPEN
+    letters.forEach(l=>{
         const btn = document.createElement("div");
-        btn.textContent = l;
-        btn.classList.add("letter");
-        btn.addEventListener("click", () => clickLetter(l, btn));
+        btn.innerText = l;
+        btn.className = "letter";
+
+        btn.addEventListener("click", function(){
+            clickLetter(l, btn);
+        });
+
         lettersContainer.appendChild(btn);
     });
+
+    console.log("Aantal knoppen:", lettersContainer.children.length);
 }
 
 function clickLetter(letter, btn) {
