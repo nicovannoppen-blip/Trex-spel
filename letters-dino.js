@@ -84,14 +84,22 @@ function newWord(){
     // underscores onder pictogram
     updateWordDisplay();
 
-    // maak letters inclusief distractors
+    // Letters van het woord
     let letters = currentWord.split("");
+
+    // Voeg 3 letters toe die niet in het woord zitten
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    while(letters.length < currentWord.length + 3){
-        letters.push(alphabet[Math.floor(Math.random()*alphabet.length)]);
+    let distractors = [];
+    while(distractors.length < 3){
+        const l = alphabet[Math.floor(Math.random()*alphabet.length)];
+        if(!letters.includes(l) && !distractors.includes(l)){
+            distractors.push(l);
+        }
     }
+    letters = letters.concat(distractors);
     letters.sort(()=>Math.random()-0.5);
 
+    // Voeg letters toe aan container
     letters.forEach(l=>{
         const btn = document.createElement("div");
         btn.textContent = l;
@@ -135,7 +143,7 @@ function updateWordDisplay(){
         span.textContent = i<collected.length ? currentWord[i] : "_";
         span.classList.add(i<collected.length ? "guessed" : "");
         wordDisplayEl.appendChild(span);
-        wordDisplayEl.appendChild(document.createTextNode(" ")); // spatie tussen letters
+        wordDisplayEl.appendChild(document.createTextNode(" ")); // spatie
     }
 }
 
