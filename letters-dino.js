@@ -1,4 +1,4 @@
-// -------------------- DATA --------------------
+// ---------- DATA ----------
 const words = [
     {word:"kat", img:"assets/kat.png"},
     {word:"vis", img:"assets/vis.png"},
@@ -9,18 +9,15 @@ const words = [
 let currentWord = "";
 let collected = "";
 
-// -------------------- ELEMENTEN --------------------
+// ---------- ELEMENTEN ----------
 const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
 const scoreEl = document.getElementById("score");
 const wordImageEl = document.getElementById("word-image");
-
 const trex = document.getElementById("trex");
 
-const playerSelectionEl = document.getElementById("player-selection");
-
-// -------------------- PROFIELEN --------------------
+// ---------- PROFIEL ----------
 let profiles = JSON.parse(localStorage.getItem("profiles")) || {
     "Odin": { score: 0 },
     "Niel": { score: 0 }
@@ -28,40 +25,41 @@ let profiles = JSON.parse(localStorage.getItem("profiles")) || {
 
 let currentPlayer = localStorage.getItem("currentPlayer");
 
-// -------------------- SPELER KIEZEN --------------------
-document.getElementById("odin-btn").onclick = () => selectPlayer("Odin");
-document.getElementById("niel-btn").onclick = () => selectPlayer("Niel");
+// ---------- SPELER ----------
+const odinBtn = document.getElementById("odin-btn");
+const nielBtn = document.getElementById("niel-btn");
+
+if(odinBtn) odinBtn.onclick = ()=>selectPlayer("Odin");
+if(nielBtn) nielBtn.onclick = ()=>selectPlayer("Niel");
 
 function selectPlayer(name){
     currentPlayer = name;
     localStorage.setItem("currentPlayer", name);
-    playerSelectionEl.style.display = "none";
+    document.getElementById("player-selection").style.display="none";
     startGame();
 }
 
 if(currentPlayer){
-    playerSelectionEl.style.display = "none";
+    document.getElementById("player-selection").style.display="none";
     startGame();
 }
 
-// -------------------- SPRAAK --------------------
+// ---------- SPRAAK ----------
 function speak(text){
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = "nl-NL";
+    u.lang="nl-NL";
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
 }
 
 function speakLetterNL(letter){
-    const phonetic = {
-        "m":"em","n":"n","b":"b","p":"p","t":"t","k":"k"
-    };
-    const u = new SpeechSynthesisUtterance(phonetic[letter] || letter);
-    u.lang = "nl-NL";
+    const map = {"m":"em"};
+    const u = new SpeechSynthesisUtterance(map[letter]||letter);
+    u.lang="nl-NL";
     speechSynthesis.speak(u);
 }
 
-// -------------------- WOORD TONEN --------------------
+// ---------- WOORD ----------
 function updateWordDisplay(){
     wordEl.innerHTML = "";
 
@@ -70,7 +68,6 @@ function updateWordDisplay(){
 
         if(i < collected.length){
             span.textContent = currentWord[i];
-            span.classList.add("guessed");
         } else {
             span.textContent = "_";
         }
@@ -80,11 +77,11 @@ function updateWordDisplay(){
     }
 }
 
-// -------------------- NIEUW WOORD --------------------
+// ---------- NIEUW WOORD ----------
 function newWord(){
-    collected = "";
-    messageEl.textContent = "";
-    lettersContainer.innerHTML = "";
+    collected="";
+    messageEl.textContent="";
+    lettersContainer.innerHTML="";
 
     const w = words[Math.floor(Math.random()*words.length)];
     currentWord = w.word;
@@ -95,75 +92,84 @@ function newWord(){
 
     let letters = currentWord.split("");
 
-    const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    let extra = [];
+    const alphabet="abcdefghijklmnopqrstuvwxyz";
+    let extra=[];
 
-    while(extra.length < 3){
-        const l = alphabet[Math.floor(Math.random()*alphabet.length)];
-        if(!letters.includes(l)){
-            extra.push(l);
-        }
+    while(extra.length<3){
+        let l=alphabet[Math.floor(Math.random()*alphabet.length)];
+        if(!letters.includes(l)) extra.push(l);
     }
 
     letters = letters.concat(extra);
     letters.sort(()=>Math.random()-0.5);
 
     letters.forEach(l=>{
-        const btn = document.createElement("div");
-        btn.className = "letter";
-        btn.textContent = l;
+        const btn=document.createElement("div");
+        btn.className="letter";
+        btn.textContent=l;
 
-        btn.onclick = ()=>clickLetter(l, btn);
+        btn.onclick=()=>clickLetter(l,btn);
 
         lettersContainer.appendChild(btn);
     });
 }
 
-// -------------------- LETTER KLIK --------------------
-function clickLetter(letter, btn){
+// ---------- CLICK ----------
+function clickLetter(letter,btn){
     speakLetterNL(letter);
 
-    if(letter === currentWord[collected.length]){
-        collected += letter;
-        btn.style.visibility = "hidden";
-
+    if(letter===currentWord[collected.length]){
+        collected+=letter;
+        btn.style.visibility="hidden";
         updateWordDisplay();
 
-        if(collected === currentWord){
-            messageEl.textContent = "Goed gedaan!";
-            profiles[currentPlayer].score += 10;
-            localStorage.setItem("profiles", JSON.stringify(profiles));
+        if(collected===currentWord){
+            messageEl.textContent="Goed gedaan!";
+            speak("Goed gedaan!");
+
+            profiles[currentPlayer].score+=10;
+            localStorage.setItem("profiles",JSON.stringify(profiles));
             updateScore();
 
-            speak("Goed gedaan!");
-            setTimeout(newWord, 1500);
+            setTimeout(newWord,1500);
         }
     } else {
-        messageEl.textContent = "Fout!";
+        messageEl.textContent="Fout!";
         speak("Fout");
     }
 }
 
-// -------------------- SCORE --------------------
+// ---------- SCORE ----------
 function updateScore(){
     scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-// -------------------- START --------------------
+// ---------- START ----------
 function startGame(){
     updateScore();
     speak(`Welkom ${currentPlayer}. Klik de letters in de juiste volgorde.`);
-    setTimeout(newWord, 1500);
+    setTimeout(newWord,1500);
 }
 
-// -------------------- DINO VOLGEN --------------------
-document.addEventListener("click", e=>{
-    trex.style.left = e.clientX + "px";
-    trex.style.top = e.clientY + "px";
+// ---------- DINO ----------
+document.addEventListener("click",e=>{
+    trex.style.left=e.clientX+"px";
+    trex.style.top=e.clientY+"px";
 });
 
-// -------------------- WISSEL SPELER --------------------
-function switchPlayer(){
+// ---------- SWITCH ----------
+document.getElementById("switch-btn").onclick = ()=>{
     localStorage.removeItem("currentPlayer");
     location.reload();
-}
+};
+
+// ---------- BLADEREN ----------
+const leavesContainer = document.getElementById("leaves-container");
+setInterval(()=>{
+    const leaf=document.createElement("div");
+    leaf.className="leaf";
+    leaf.style.left=Math.random()*window.innerWidth+"px";
+    leaf.style.animationDuration=5+Math.random()*5+"s";
+    leavesContainer.appendChild(leaf);
+    leaf.addEventListener("animationend",()=>leaf.remove());
+},500);
