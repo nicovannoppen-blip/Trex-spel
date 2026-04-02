@@ -1,166 +1,181 @@
-const trex = document.getElementById("trex");
-const lettersDiv = document.getElementById("letters");
-const wordImage = document.getElementById("wordImage");
-const progressEl = document.getElementById("progress");
-const scoreEl = document.getElementById("score");
-
-const reward = document.getElementById("reward");
-const starsEl = document.getElementById("stars");
-const nextBtn = document.getElementById("nextBtn");
-
-const playerSelect = document.getElementById("playerSelect");
-
-let introDone = false;
-
-/* woorden */
-let words = [
-    {word:"kat", img:"assets/kat.png"},
-    {word:"vis", img:"assets/vis.png"},
-    {word:"boom", img:"assets/boom.png"}
+// Woorden + afbeeldingen
+const words = [
+  {word:"kat", img:"assets/kat.png"},
+  {word:"vis", img:"assets/vis.png"},
+  {word:"boom", img:"assets/boom.png"},
+  {word:"hond", img:"assets/hond.png"}
 ];
 
-let current=0, index=0, score=0, mistakes=0;
+let currentWord = "";
+let currentImage = "";
+let collected = "";
 
-/* phonetic letters */
+const wordEl = document.getElementById("word");
+const collectedEl = document.getElementById("collected");
+const lettersContainer = document.getElementById("letters-container");
+const messageEl = document.getElementById("message");
+const scoreEl = document.getElementById("score");
+const imageEl = document.getElementById("word-image");
+const trex = document.getElementById("trex");
+
+const correctSound = document.getElementById("correct-sound");
+const wrongSound = document.getElementById("wrong-sound");
+
+// Profielen
+let profiles = JSON.parse(localStorage.getItem("profiles")) || {
+    "Odin": { score: 0 },
+    "Niel": { score: 0 }
+};
+
+let currentPlayer = localStorage.getItem("currentPlayer");
+
+const playerSelectionEl = document.getElementById("player-selection");
+
+document.getElementById("odin-btn").onclick = () => selectPlayer("Odin");
+document.getElementById("niel-btn").onclick = () => selectPlayer("Niel");
+
+function selectPlayer(name) {
+    currentPlayer = name;
+    localStorage.setItem("currentPlayer", currentPlayer);
+    playerSelectionEl.style.display = "none";
+    startGame();
+}
+
+if (currentPlayer) {
+    playerSelectionEl.style.display = "none";
+    startGame();
+}
+
+/* ---------- TTS ---------- */
+function speak(text) {
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = "nl-NL";
+    window.speechSynthesis.speak(u);
+}
+
 function speakLetterNL(letter) {
     const phonetic = {
-        "a":"a","b":"b","c":"c","d":"d","e":"e","f":"f",
-        "g":"g","h":"h","i":"i","j":"j","k":"k","l":"l",
-        "m":"em","n":"n","o":"o","p":"p","q":"q","r":"r",
-        "s":"s","t":"t","u":"u","v":"v","w":"w","x":"x",
-        "y":"y","z":"z"
+        "m":"em","n":"n","b":"b","p":"p","k":"k"
     };
-    let u = new SpeechSynthesisUtterance(phonetic[letter]);
-    u.lang="nl-NL";
-    speechSynthesis.cancel();
-    speechSynthesis.speak(u);
+    const u = new SpeechSynthesisUtterance(phonetic[letter] || letter);
+    u.lang = "nl-NL";
+    window.speechSynthesis.speak(u);
 }
 
-function speak(text){
-    let s=new SpeechSynthesisUtterance(text);
-    s.lang="nl-BE";
-    speechSynthesis.cancel();
-    speechSynthesis.speak(s);
+/* ---------- GAME ---------- */
+
+function updateWordDisplay() {
+    wordEl.innerHTML = "";
+    for (let i = 0; i < currentWord.length; i++) {
+        const span = document.createElement("span");
+
+        if (i < collected.length) {
+            span.classList.add("guessed");
+            span.textContent = currentWord[i];
+        } else {
+            span.textContent = "_";
+        }
+
+        wordEl.appendChild(span);
+    }
 }
 
-/* profiel kiezen */
-function selectPlayer(name){
-    localStorage.setItem("player", name);
-    playerSelect.style.display="none";
+function startGame() {
+    speak(`Welkom ${currentPlayer}! Klik de letters in de juiste volgorde.`);
+    updateScoreDisplay();
+    setTimeout(newWord, 2000);
+}
 
-    if(!introDone){
-        speak("Klik de letters in de juiste volgorde om het woord te maken");
-        introDone=true;
+function newWord() {
+    collected = "";
+    collectedEl.textContent = "";
+    messageEl.textContent = "";
+
+    const obj = words[Math.floor(Math.random() * words.length)];
+    currentWord = obj.word;
+    currentImage = obj.img;
+
+    imageEl.src = currentImage;
+
+    updateWordDisplay();
+
+    speak("Welk woord is dit?");
+
+    lettersContainer.innerHTML = "";
+
+    let letters = currentWord.split("");
+    const alphabet = "abcdefghijklmnopqrstuvwxyz";
+
+    while (letters.length < currentWord.length + 3) {
+        letters.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
     }
 
-    startLevel();
-}
+    letters = letters.sort(() => Math.random() - 0.5);
 
-/* check speler bij start */
-if(!localStorage.getItem("player")){
-    playerSelect.style.display="flex";
-} else {
-    playerSelect.style.display="none";
-    speak("Klik de letters in de juiste volgorde om het woord te maken");
-    startLevel();
-}
+    letters.forEach(l => {
+        const btn = document.createElement("div");
+        btn.textContent = l;
+        btn.classList.add("letter");
 
-/* random positie */
-function randomPosition(el){
-    let x = Math.random()*(window.innerWidth-150);
-    let y = Math.random()*(window.innerHeight-200);
-    el.style.left = x+"px";
-    el.style.top = y+"px";
-}
+        btn.addEventListener("click", (e) => clickLetter(l, btn, e));
 
-/* start level */
-function startLevel(){
-    lettersDiv.innerHTML="";
-    index=0;
-    mistakes=0;
-
-    let w = words[current];
-    wordImage.src = w.img;
-
-    updateProgress();
-
-    let letters = w.word.split("").sort(()=>Math.random()-0.5);
-
-    letters.forEach(letter=>{
-        let el=document.createElement("div");
-        el.className="letter";
-        el.innerText=letter;
-        randomPosition(el);
-
-        el.onclick=()=>{
-            trex.style.left=el.style.left;
-            trex.style.top=el.style.top;
-
-            if(letter===w.word[index]){
-                el.classList.add("pop");
-                setTimeout(()=>el.remove(),200);
-                index++;
-                score+=10;
-
-                speakLetterNL(letter);
-                updateProgress();
-
-                if(index===w.word.length){
-                    setTimeout(()=>{
-                        speak("Goed gedaan!");
-                        showReward();
-                    },500);
-                }
-
-            } else {
-                score-=5;
-                mistakes++;
-                trex.classList.add("shake");
-                setTimeout(()=>trex.classList.remove("shake"),200);
-                speak("fout");
-            }
-
-            scoreEl.innerText="⭐ "+score;
-        };
-
-        lettersDiv.appendChild(el);
+        lettersContainer.appendChild(btn);
     });
 }
 
-/* progress */
-function updateProgress(){
-    let word = words[current].word;
-    progressEl.innerText = word.slice(0,index)+"_".repeat(word.length-index);
+function clickLetter(letter, btn, event) {
+    speakLetterNL(letter);
+
+    // DINO beweegt naar klik
+    trex.style.left = event.clientX + "px";
+    trex.style.top = event.clientY + "px";
+
+    setTimeout(() => {
+        if (currentWord[collected.length] === letter) {
+            collected += letter;
+            collectedEl.textContent = collected;
+
+            btn.style.visibility = "hidden";
+            updateWordDisplay();
+
+            correctSound?.play();
+
+            if (collected === currentWord) {
+                messageEl.textContent = "Goed gedaan! 🎉";
+
+                profiles[currentPlayer].score += 10;
+                localStorage.setItem("profiles", JSON.stringify(profiles));
+                updateScoreDisplay();
+
+                speak("Goed gedaan!");
+                setTimeout(newWord, 1500);
+            }
+        } else {
+            messageEl.textContent = "Fout! Probeer opnieuw.";
+            speak("Fout! Probeer opnieuw.");
+            wrongSound?.play();
+        }
+    }, 300);
 }
 
-/* reward */
-function showReward(){
-    reward.style.display="flex";
-
-    let stars=3;
-    if(mistakes>1) stars=2;
-    if(mistakes>3) stars=1;
-
-    starsEl.innerText="⭐".repeat(stars);
+function updateScoreDisplay() {
+    scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-/* next */
-nextBtn.onclick=()=>{
-    reward.style.display="none";
-    current++;
+/* bladeren */
+const leavesContainer = document.getElementById("leaves-container");
+function createLeaf() {
+    const leaf = document.createElement("div");
+    leaf.classList.add("leaf");
+    leaf.style.left = Math.random() * window.innerWidth + "px";
+    leaf.style.animationDuration = 5 + Math.random() * 5 + "s";
+    leavesContainer.appendChild(leaf);
+    leaf.addEventListener("animationend", () => leaf.remove());
+}
+setInterval(createLeaf, 500);
 
-    if(current>=words.length){
-        current=0;
-    }
-
-    startLevel();
-};
-
-/* knoppen */
-document.getElementById("backBtn").onclick=()=>{
-    window.location.href="index.html";
-};
-
-document.getElementById("playerBtn").onclick=()=>{
-    playerSelect.style.display="flex";
-};
+/* wissel speler */
+function switchPlayer() {
+    localStorage.removeItem("currentPlayer");
+    location.reload();
+}
