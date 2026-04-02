@@ -8,13 +8,22 @@
 </head>
 <body>
 
+<!-- HEADER -->
 <header>
     <button id="backBtn">⬅</button>
     <div id="title">🦖 Woordspel</div>
     <button id="playerBtn">👤</button>
 </header>
 
-<div id="game">
+<!-- PROFIELKEUZE -->
+<div id="playerSelect">
+    <h2>Kies speler</h2>
+    <button onclick="selectPlayer('Speler 1')">Speler 1</button>
+    <button onclick="selectPlayer('Speler 2')">Speler 2</button>
+</div>
+
+<!-- GAME CONTAINER (zoals letter jungle) -->
+<div id="gameContainer">
     <img id="trex" src="assets/trex1.png">
 
     <div id="letters"></div>
@@ -27,6 +36,7 @@
     <div id="score">⭐ 0</div>
 </div>
 
+<!-- REWARD -->
 <div id="reward">
     <h2>🎉</h2>
     <div id="stars"></div>
