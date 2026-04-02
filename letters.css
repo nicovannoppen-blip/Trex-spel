@@ -5,7 +5,6 @@ body{
     overflow:hidden;
 }
 
-/* HEADER (zelfde stijl) */
 header{
     background:#4285F4;
     color:white;
@@ -21,39 +20,9 @@ header button{
     border:none;
     padding:8px;
     border-radius:8px;
-    cursor:pointer;
 }
 
-#title{
-    font-size:20px;
-    font-weight:bold;
-}
-
-/* MENU */
-#menu{
-    position:absolute;
-    top:60px;
-    width:100%;
-    height:calc(100% - 60px);
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:15px;
-}
-
-#menu button{
-    font-size:22px;
-    padding:12px 20px;
-    border:none;
-    border-radius:12px;
-    background:#4caf50;
-    color:white;
-}
-
-/* GAME */
 #game{
-    display:none;
     position:absolute;
     top:60px;
     width:100%;
@@ -85,14 +54,14 @@ header button{
 }
 
 #target img{
-    width:80px;
+    width:90px;
 }
 
 #progress{
     position:absolute;
-    top:100px;
+    top:110px;
     right:10px;
-    font-size:28px;
+    font-size:30px;
 }
 
 #score{
@@ -104,13 +73,7 @@ header button{
     border-radius:10px;
 }
 
-#levelUI{
-    position:absolute;
-    top:50px;
-    left:10px;
-}
-
-/* REWARD */
+/* reward */
 #reward{
     display:none;
     position:absolute;
@@ -123,7 +86,7 @@ header button{
     flex-direction:column;
 }
 
-/* ANIMATIES */
+/* animaties */
 .pop{ animation:pop 0.3s forwards; }
 @keyframes pop{ to{ transform:scale(2); opacity:0; } }
 
