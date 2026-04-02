@@ -14,7 +14,6 @@ let profiles = JSON.parse(localStorage.getItem("profiles")) || { Odin:{score:0},
 // ---------- ELEMENTEN ----------
 const playerSelectionEl = document.getElementById("player-selection");
 const wordDisplayEl = document.getElementById("word-display");
-const collectedDisplayEl = document.getElementById("collected-display");
 const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
 const scoreEl = document.getElementById("score");
@@ -82,8 +81,8 @@ function newWord(){
     currentWord = w.word;
     wordImageEl.src = w.img;
 
+    // underscores onder pictogram
     updateWordDisplay();
-    collectedDisplayEl.textContent = collected;
 
     // maak letters inclusief distractors
     let letters = currentWord.split("");
@@ -109,20 +108,15 @@ function clickLetter(letter, btn){
     setTimeout(()=>{
         if(currentWord[collected.length]===letter){
             collected += letter;
-            collectedDisplayEl.textContent = collected;
-            btn.style.visibility = "hidden";
             correctSound.play();
             updateWordDisplay();
 
             if(collected===currentWord){
                 messageEl.textContent="Goed gedaan! 🎉";
                 speak("Goed gedaan!");
-
-                // score
                 profiles[currentPlayer].score += 10;
                 localStorage.setItem("profiles", JSON.stringify(profiles));
                 updateScore();
-
                 setTimeout(newWord, 1500);
             }
         } else {
@@ -133,17 +127,15 @@ function clickLetter(letter, btn){
     }, 300);
 }
 
+// Update underscores en ingevulde letters
 function updateWordDisplay(){
-    wordDisplayEl.innerHTML="";
+    wordDisplayEl.innerHTML = "";
     for(let i=0;i<currentWord.length;i++){
         const span = document.createElement("span");
-        if(i<collected.length){
-            span.textContent = currentWord[i];
-            span.classList.add("guessed");
-        } else {
-            span.textContent = currentWord[i];
-        }
+        span.textContent = i<collected.length ? currentWord[i] : "_";
+        span.classList.add(i<collected.length ? "guessed" : "");
         wordDisplayEl.appendChild(span);
+        wordDisplayEl.appendChild(document.createTextNode(" ")); // spatie tussen letters
     }
 }
 
@@ -153,7 +145,7 @@ function updateScore(){
 
 // ---------- KNOPPEN ----------
 document.getElementById("back-btn").onclick = ()=>{
-    newWord();
+    window.location.href="index.html";
 };
 
 document.getElementById("switch-btn").onclick = ()=>{
