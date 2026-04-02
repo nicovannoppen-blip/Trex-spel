@@ -3,46 +3,49 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dino Woordspel</title>
-<link rel="stylesheet" href="letters.css">
+<title>🦖 Dino Letters</title>
+<link rel="stylesheet" href="letter-jungle.css">
 </head>
+
 <body>
 
-<!-- HEADER -->
-<header>
-    <button id="backBtn">⬅</button>
-    <div id="title">🦖 Woordspel</div>
-    <button id="playerBtn">👤</button>
-</header>
+<div class="game-container">
 
-<!-- PROFIELKEUZE -->
-<div id="playerSelect">
-    <h2>Kies speler</h2>
-    <button onclick="selectPlayer('Speler 1')">Speler 1</button>
-    <button onclick="selectPlayer('Speler 2')">Speler 2</button>
-</div>
-
-<!-- GAME CONTAINER (zoals letter jungle) -->
-<div id="gameContainer">
-    <img id="trex" src="assets/trex1.png">
-
-    <div id="letters"></div>
-
-    <div id="target">
-        <img id="wordImage">
+    <div id="player-selection">
+        <p>Wie speelt?</p>
+        <button id="odin-btn">Odin</button>
+        <button id="niel-btn">Niel</button>
     </div>
 
-    <div id="progress"></div>
-    <div id="score">⭐ 0</div>
+    <h1>Dino Letters 🦖</h1>
+
+    <p>Klik de letters:</p>
+
+    <!-- NIEUW -->
+    <img id="word-image" style="width:120px; margin:10px 0;">
+
+    <p id="word"></p>
+    <p>Gevonden letters: <span id="collected"></span></p>
+
+    <!-- DINO -->
+    <img id="trex" src="assets/trex1.png" style="width:80px; position:absolute;">
+
+    <div id="letters-container"></div>
+
+    <p id="score">Score: 0</p>
+    <p id="message"></p>
+
+    <a href="index.html" class="button">⬅ Terug</a>
+    <button onclick="switchPlayer()" class="button">🔄 Wissel speler</button>
+
 </div>
 
-<!-- REWARD -->
-<div id="reward">
-    <h2>🎉</h2>
-    <div id="stars"></div>
-    <button id="nextBtn">➡</button>
-</div>
+<div id="leaves-container"></div>
 
-<script src="letters.js"></script>
+<audio id="correct-sound" src="sounds/correct.mp3"></audio>
+<audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
+
+<script src="letters-dino.js"></script>
+
 </body>
 </html>
