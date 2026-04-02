@@ -84,26 +84,22 @@ function speakLetterNL(letter) {
 }
 
 // -------------------- Spel functies --------------------
-function updateWordDisplay() {
-    wordEl.innerHTML = "";
-    for (let i = 0; i < currentWord.length; i++) {
-        const span = document.createElement("span");
-        if (i < collected.length) {
-            span.classList.add("guessed");
-            span.style.fontWeight = "bold"; // Vetgedrukte geraden letters
-            span.textContent = currentWord[i];
-        } else {
-            span.classList.add("unguessed");
-            span.textContent = currentWord[i];
-        }
-        wordEl.appendChild(span);
-    }
-}
+function updateWordDisplay(){
+    wordDisplayEl.innerHTML = "";
 
-function startGame() {
-    speak(`Welkom ${currentPlayer} bij Letter Jungle! Klik op de letters in de juiste volgorde om het woord te bouwen.`);
-    updateScoreDisplay();
-    setTimeout(newWord, 3000);
+    for(let i=0;i<currentWord.length;i++){
+        const span = document.createElement("span");
+
+        if(i < collected.length){
+            span.textContent = currentWord[i];
+            span.classList.add("guessed"); // alleen hier toevoegen
+        } else {
+            span.textContent = "_";
+        }
+
+        wordDisplayEl.appendChild(span);
+        wordDisplayEl.appendChild(document.createTextNode(" "));
+    }
 }
 
 function newWord(){
