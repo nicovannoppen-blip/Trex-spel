@@ -10,37 +10,38 @@ body {
     height: 100vh;
 }
 
+/* container */
 .game-container {
-    background: rgba(180, 180, 180, 0.5);
+    background: rgba(180,180,180,0.5);
     backdrop-filter: blur(10px);
     padding: 40px;
     border-radius: 25px;
     text-align: center;
     width: 90%;
     max-width: 600px;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-    position: relative;
 }
 
-h1 { font-size: 2.5em; margin-bottom: 15px; }
+/* woord */
+#word {
+    font-size: 3em;
+    margin: 20px 0;
+}
 
+/* letters */
 #letters-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 12px;
     margin-top: 20px;
-    min-height: 100px;
-    position: relative;
-    z-index: 5; /* BELANGRIJK */
+    min-height: 80px;
 }
-
 
 .letter {
     width: 60px;
     height: 60px;
-    background: white;          /* VOLLEDIG wit */
-    color: black;               /* zwarte letters */
+    background: white;
+    color: black;
     border-radius: 12px;
     display: flex;
     justify-content: center;
@@ -48,51 +49,41 @@ h1 { font-size: 2.5em; margin-bottom: 15px; }
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
-    border: 2px solid #333;     /* extra zichtbaar */
-    transition: 0.2s;
 }
 
 .letter:hover {
     transform: scale(1.2);
 }
-.letter:hover { transform: scale(1.2); }
 
+/* knoppen */
 .button {
     display: inline-block;
-    margin: 10px 5px 0 5px;
+    margin-top: 20px;
     padding: 12px 20px;
     background: rgba(0,0,0,0.6);
     border-radius: 10px;
     color: white;
+    text-decoration: none;
     border: none;
-    cursor: pointer;
 }
 
-#player-selection button {
-    margin: 5px;
-    padding: 10px 20px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(0,0,0,0.6);
-    color: white;
-}
-
-#word-display { font-size: 2em; margin: 10px 0; }
-.guessed { font-weight: bold; }
-#collected-display { font-size: 1.5em; margin-bottom: 10px; }
-
-#target-pictogram img { width: 80px; margin-bottom: 10px; }
-
+/* dino */
 #trex {
     position: absolute;
     width: 80px;
     left: 50px;
     top: 50px;
-    transition: 0.2s;
-    z-index: 1; /* lager dan letters */
+    pointer-events: none;
 }
 
-#leaves-container { position: fixed; width: 100%; height: 100%; pointer-events: none; }
+/* bladeren */
+#leaves-container {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
 .leaf {
     position: absolute;
     width: 30px;
