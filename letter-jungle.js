@@ -18,7 +18,7 @@ const words = [
 
 let currentWord = "";
 let collected = "";
-const wordImageEl = document.getElementById("word-image");
+
 const wordEl = document.getElementById("word");
 const collectedEl = document.getElementById("collected");
 const lettersContainer = document.getElementById("letters-container");
@@ -84,76 +84,81 @@ function speakLetterNL(letter) {
 }
 
 // -------------------- Spel functies --------------------
-function updateWordDisplay(){
-    const wordDisplayEl = document.getElementById("word"); // extra veilig
-
-    wordDisplayEl.innerHTML = "";
-
-    for(let i = 0; i < currentWord.length; i++){
+function updateWordDisplay() {
+    wordEl.innerHTML = "";
+    for (let i = 0; i < currentWord.length; i++) {
         const span = document.createElement("span");
-
-        if(i < collected.length){
-            span.textContent = currentWord[i];
+        if (i < collected.length) {
             span.classList.add("guessed");
+            span.style.fontWeight = "bold"; // Vetgedrukte geraden letters
+            span.textContent = currentWord[i];
         } else {
-            span.textContent = "_";
+            span.classList.add("unguessed");
+            span.textContent = currentWord[i];
         }
-
-        wordDisplayEl.appendChild(span);
-        wordDisplayEl.appendChild(document.createTextNode(" "));
+        wordEl.appendChild(span);
     }
 }
 
-function newWord(){
-    console.log("newWord gestart");
+function startGame() {
+    speak(`Welkom ${currentPlayer} bij Letter Jungle! Klik op de letters in de juiste volgorde om het woord te bouwen.`);
+    updateScoreDisplay();
+    setTimeout(newWord, 3000);
+}
+
+function newWord() {
+
 
     collected = "";
+    collectedEl.textContent = collected;
     messageEl.textContent = "";
-    lettersContainer.innerHTML = "";
 
-    // kies woord
-    const w = words[Math.floor(Math.random()*words.length)];
-    currentWord = w.word;
 
-    console.log("woord:", currentWord);
-
-    wordImageEl.src = w.img;
-
+    currentWord = words[Math.floor(Math.random() * words.length)];
     updateWordDisplay();
 
+
+    speak("Bouw het woord: " + currentWord);
+
+
+
+
+
+    lettersContainer.innerHTML = "";
     let letters = currentWord.split("");
 
     const alphabet = "abcdefghijklmnopqrstuvwxyz";
-    let distractors = [];
+    while (letters.length < currentWord.length + 3) {
+        letters.push(alphabet[Math.floor(Math.random() * alphabet.length)]);
 
-    while(distractors.length < 3){
-        const l = alphabet[Math.floor(Math.random()*alphabet.length)];
-        if(!letters.includes(l) && !distractors.includes(l)){
-            distractors.push(l);
-        }
+
+
+
+
     }
+    letters = letters.sort(() => Math.random() - 0.5);
 
-    letters = letters.concat(distractors);
+    letters.forEach(l => {
 
-    console.log("letters:", letters);
 
-    // shuffle
-    letters.sort(()=>Math.random()-0.5);
 
-    // MAKEN KNOPPEN
-    letters.forEach(l=>{
+
+
+
+
+
         const btn = document.createElement("div");
-        btn.innerText = l;
-        btn.className = "letter";
+        btn.textContent = l;
+        btn.classList.add("letter");
+        btn.addEventListener("click", () => clickLetter(l, btn));
 
-        btn.addEventListener("click", function(){
-            clickLetter(l, btn);
-        });
+
+
 
         lettersContainer.appendChild(btn);
     });
 
-    console.log("Aantal knoppen:", lettersContainer.children.length);
+
 }
 
 function clickLetter(letter, btn) {
