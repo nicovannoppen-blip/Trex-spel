@@ -8,20 +8,20 @@ const reward = document.getElementById("reward");
 const starsEl = document.getElementById("stars");
 const nextBtn = document.getElementById("nextBtn");
 
-const backBtn = document.getElementById("backBtn");
-const playerBtn = document.getElementById("playerBtn");
+const playerSelect = document.getElementById("playerSelect");
+
+let introDone = false;
 
 /* woorden */
 let words = [
     {word:"kat", img:"assets/kat.png"},
     {word:"vis", img:"assets/vis.png"},
-    {word:"boom", img:"assets/boom.png"},
-    {word:"hond", img:"assets/hond.png"}
+    {word:"boom", img:"assets/boom.png"}
 ];
 
 let current=0, index=0, score=0, mistakes=0;
 
-/* 🔊 EXACT zelfde letter jungle uitspraak */
+/* phonetic letters */
 function speakLetterNL(letter) {
     const phonetic = {
         "a":"a","b":"b","c":"c","d":"d","e":"e","f":"f",
@@ -30,29 +30,50 @@ function speakLetterNL(letter) {
         "s":"s","t":"t","u":"u","v":"v","w":"w","x":"x",
         "y":"y","z":"z"
     };
-    const utterance = new SpeechSynthesisUtterance(phonetic[letter.toLowerCase()]);
-    utterance.lang = "nl-NL";
+    let u = new SpeechSynthesisUtterance(phonetic[letter]);
+    u.lang="nl-NL";
     speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
+    speechSynthesis.speak(u);
 }
 
-/* zelfde stem gedrag */
 function speak(text){
-    let s = new SpeechSynthesisUtterance(text);
+    let s=new SpeechSynthesisUtterance(text);
     s.lang="nl-BE";
     speechSynthesis.cancel();
     speechSynthesis.speak(s);
 }
 
+/* profiel kiezen */
+function selectPlayer(name){
+    localStorage.setItem("player", name);
+    playerSelect.style.display="none";
+
+    if(!introDone){
+        speak("Klik de letters in de juiste volgorde om het woord te maken");
+        introDone=true;
+    }
+
+    startLevel();
+}
+
+/* check speler bij start */
+if(!localStorage.getItem("player")){
+    playerSelect.style.display="flex";
+} else {
+    playerSelect.style.display="none";
+    speak("Klik de letters in de juiste volgorde om het woord te maken");
+    startLevel();
+}
+
 /* random positie */
 function randomPosition(el){
-    let x = Math.random()*(window.innerWidth-120);
-    let y = Math.random()*(window.innerHeight-180);
+    let x = Math.random()*(window.innerWidth-150);
+    let y = Math.random()*(window.innerHeight-200);
     el.style.left = x+"px";
     el.style.top = y+"px";
 }
 
-/* start */
+/* start level */
 function startLevel(){
     lettersDiv.innerHTML="";
     index=0;
@@ -62,9 +83,6 @@ function startLevel(){
     wordImage.src = w.img;
 
     updateProgress();
-
-    /* uitleg zoals letter jungle */
-    speak("Klik de letters in de juiste volgorde");
 
     let letters = w.word.split("").sort(()=>Math.random()-0.5);
 
@@ -89,15 +107,14 @@ function startLevel(){
 
                 if(index===w.word.length){
                     setTimeout(()=>{
-                        /* EXACT zelfde felicitatielogica */
                         speak("Goed gedaan!");
                         showReward();
                     },500);
                 }
 
             } else {
-                mistakes++;
                 score-=5;
+                mistakes++;
                 trex.classList.add("shake");
                 setTimeout(()=>trex.classList.remove("shake"),200);
                 speak("fout");
@@ -139,15 +156,11 @@ nextBtn.onclick=()=>{
     startLevel();
 };
 
-/* knoppen EXACT zoals letter jungle */
-backBtn.onclick=()=>{
-    window.location.href="index.html"; // zelfde gedrag
+/* knoppen */
+document.getElementById("backBtn").onclick=()=>{
+    window.location.href="index.html";
 };
 
-playerBtn.onclick=()=>{
-    localStorage.removeItem("player");
-    location.reload();
+document.getElementById("playerBtn").onclick=()=>{
+    playerSelect.style.display="flex";
 };
-
-/* start */
-startLevel();
