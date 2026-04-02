@@ -18,7 +18,7 @@ const words = [
 
 let currentWord = "";
 let collected = "";
-
+const wordImageEl = document.getElementById("word-image");
 const wordEl = document.getElementById("word");
 const collectedEl = document.getElementById("collected");
 const lettersContainer = document.getElementById("letters-container");
@@ -85,11 +85,8 @@ function speakLetterNL(letter) {
 
 // -------------------- Spel functies --------------------
 function updateWordDisplay(){
-    wordDisplayEl.innerHTML = "";
+    const wordDisplayEl = document.getElementById("word"); // extra veilig
 
-    for(let i=0;i<currentWord.length;i++){
-        const span = document.createElement("span");
-        function updateWordDisplay(){
     wordDisplayEl.innerHTML = "";
 
     for(let i = 0; i < currentWord.length; i++){
@@ -98,19 +95,6 @@ function updateWordDisplay(){
         if(i < collected.length){
             span.textContent = currentWord[i];
             span.classList.add("guessed");
-        } else {
-            span.textContent = "_";
-        }
-
-        wordDisplayEl.appendChild(span);
-
-        // spatie tussen letters
-        const space = document.createTextNode(" ");
-        wordDisplayEl.appendChild(space);
-          }
-        }      
-        if(i < collected.length){
-            span.textContent = currentWord[i];
         } else {
             span.textContent = "_";
         }
