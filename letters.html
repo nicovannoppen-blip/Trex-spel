@@ -4,21 +4,27 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>T-Rex Leerspel</title>
-<link rel="stylesheet" href="./letters.css">
+<link rel="stylesheet" href="letters.css">
 </head>
 <body>
 
+<!-- HEADER -->
+<header>
+    <button id="menuBtn">🏠 Menu</button>
+    <div id="title">🦖 T-Rex Leerspel</div>
+    <button id="resetBtn">🔄 Reset</button>
+</header>
+
 <!-- MENU -->
 <div id="menu">
-    <h1>🦖 T-Rex Leerspel</h1>
-    <p>Kies je level of start spel</p>
+    <h1>Kies een level</h1>
     <div id="levelButtons"></div>
-    <button id="startBtn">Start bij level 1</button>
+    <button id="startBtn">▶ Start bij level 1</button>
 </div>
 
 <!-- GAME -->
-<div id="game" style="display:none;">
-    <img id="trex" src="assets/trex.png">
+<div id="game">
+    <img id="trex" src="assets/trex1.png">
 
     <div id="letters"></div>
 
@@ -28,21 +34,16 @@
 
     <div id="progress"></div>
     <div id="score">⭐ 0</div>
-
-    <div id="levelUI">
-        Level <span id="levelText">1</span>
-    </div>
-
-    <button id="backBtn">⬅ Menu</button>
+    <div id="levelUI">Level <span id="levelText">1</span></div>
 </div>
 
 <!-- REWARD -->
 <div id="reward">
     <h2>Goed gedaan! 🎉</h2>
     <div id="stars"></div>
-    <button id="nextBtn">Volgende</button>
+    <button id="nextBtn">➡ Volgende</button>
 </div>
 
-<script src="./letters.js"></script>
+<script src="letters.js"></script>
 </body>
 </html>
