@@ -125,13 +125,20 @@ function clickLetter(letter,btn){
 
         if(collected===currentWord){
             messageEl.textContent="Goed gedaan!";
-            speak("Goed gedaan!");
-
+        
+            // Eerst het woord zeggen
+            speak("Het woord is " + currentWord);
+        
+            // Daarna feliciteren (met kleine vertraging)
+            setTimeout(()=>{
+                speak("Goed gedaan!");
+            }, 1200);
+        
             profiles[currentPlayer].score+=10;
             localStorage.setItem("profiles",JSON.stringify(profiles));
             updateScore();
-
-            setTimeout(newWord,1500);
+        
+            setTimeout(newWord, 2500); // iets langer wachten
         }
     } else {
         messageEl.textContent="Fout!";
