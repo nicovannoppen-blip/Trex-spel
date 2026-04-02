@@ -19,13 +19,6 @@ const words = [
 let currentWord = "";
 let collected = "";
 
-// Profielen
-let currentPlayer = localStorage.getItem("currentPlayer") || "Odin";
-let profiles = JSON.parse(localStorage.getItem("profiles")) || {
-    "Odin": { score: 0 },
-    "Niel": { score: 0 }
-};
-
 const wordEl = document.getElementById("word");
 const collectedEl = document.getElementById("collected");
 const lettersContainer = document.getElementById("letters-container");
@@ -35,16 +28,33 @@ const scoreEl = document.getElementById("score");
 const correctSound = document.getElementById("correct-sound");
 const wrongSound = document.getElementById("wrong-sound");
 
-// -------------------- Player Selection --------------------
+// Profielen ophalen
+let profiles = JSON.parse(localStorage.getItem("profiles")) || {
+    "Odin": { score: 0 },
+    "Niel": { score: 0 }
+};
+
+let currentPlayer = localStorage.getItem("currentPlayer");
+
+// Elements
 const playerSelectionEl = document.getElementById("player-selection");
 
-document.getElementById("odin-btn").addEventListener("click", () => selectPlayer("Odin"));
-document.getElementById("niel-btn").addEventListener("click", () => selectPlayer("Niel"));
+// Knoppen koppelen
+document.getElementById("odin-btn").onclick = () => selectPlayer("Odin");
+document.getElementById("niel-btn").onclick = () => selectPlayer("Niel");
 
 function selectPlayer(name) {
     currentPlayer = name;
-    playerSelectionEl.style.display = "none"; // verberg keuze
-    updateScoreDisplay();
+
+    localStorage.setItem("currentPlayer", currentPlayer);
+
+    playerSelectionEl.style.display = "none";
+    startGame();
+}
+
+// Als speler al gekozen is → direct starten
+if (currentPlayer) {
+    playerSelectionEl.style.display = "none";
     startGame();
 }
 
@@ -92,6 +102,7 @@ function updateWordDisplay() {
 
 function startGame() {
     speak(`Welkom ${currentPlayer} bij Letter Jungle! Klik op de letters in de juiste volgorde om het woord te bouwen.`);
+    updateScoreDisplay();
     setTimeout(newWord, 3000);
 }
 
@@ -138,6 +149,7 @@ function clickLetter(letter, btn) {
 
                 // Score bijwerken van huidige speler
                 profiles[currentPlayer].score += 10;
+                localStorage.setItem("profiles", JSON.stringify(profiles));
                 updateScoreDisplay();
 
                 speak("Goed gedaan!");
@@ -152,8 +164,7 @@ function clickLetter(letter, btn) {
 }
 
 function updateScoreDisplay() {
-localStorage.setItem("profiles", JSON.stringify(profiles));    
-scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
+    scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
 // -------------------- Start Bladeren animatie --------------------
