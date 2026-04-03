@@ -8,17 +8,19 @@ const words = [
 let currentWord="";
 let collected="";
 let level=1;
-let moveInterval=null;
+let movingLetters=[];
 
-// ELEMENTEN
 const wordEl = document.getElementById("word");
-const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
 const scoreEl = document.getElementById("score");
 const wordImageEl = document.getElementById("word-image");
+const lettersLayer = document.getElementById("letters-layer");
 const trex = document.getElementById("trex");
 
-// PROFIEL
+const correctSound = document.getElementById("correct-sound");
+const wrongSound = document.getElementById("wrong-sound");
+
+// profiel
 let profiles = JSON.parse(localStorage.getItem("profiles")) || {
     "Odin": { score:0 },
     "Niel": { score:0 }
@@ -26,9 +28,9 @@ let profiles = JSON.parse(localStorage.getItem("profiles")) || {
 
 let currentPlayer = localStorage.getItem("currentPlayer");
 
-// PLAYER SELECT
-document.getElementById("odin-btn").onclick = ()=>selectPlayer("Odin");
-document.getElementById("niel-btn").onclick = ()=>selectPlayer("Niel");
+// speler kiezen
+document.getElementById("odin-btn").onclick=()=>selectPlayer("Odin");
+document.getElementById("niel-btn").onclick=()=>selectPlayer("Niel");
 
 function selectPlayer(name){
     currentPlayer=name;
@@ -46,9 +48,9 @@ if(currentPlayer){
     startGame();
 }
 
-// SPRAAK
+// spraak
 function speak(text){
-    const u=new SpeechSynthesisUtterance(text);
+    let u=new SpeechSynthesisUtterance(text);
     u.lang="nl-NL";
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
@@ -56,35 +58,31 @@ function speak(text){
 
 function speakLetterNL(letter){
     const map={"m":"em"};
-    const u=new SpeechSynthesisUtterance(map[letter]||letter);
+    let u=new SpeechSynthesisUtterance(map[letter]||letter);
     u.lang="nl-NL";
     speechSynthesis.speak(u);
 }
 
-// WOORD WEERGAVE
+// woord display
 function updateWordDisplay(){
     wordEl.innerHTML="";
     for(let i=0;i<currentWord.length;i++){
-        const span=document.createElement("span");
-        span.textContent = i<collected.length ? currentWord[i] : "_";
+        let span=document.createElement("span");
+        span.textContent=i<collected.length?currentWord[i]:"_";
         wordEl.appendChild(span);
         wordEl.appendChild(document.createTextNode(" "));
     }
 }
 
-// NIEUW WOORD
+// nieuwe ronde
 function newWord(){
-
-    if(moveInterval){
-        clearInterval(moveInterval);
-        moveInterval=null;
-    }
 
     collected="";
     messageEl.textContent="";
-    lettersContainer.innerHTML="";
+    lettersLayer.innerHTML="";
+    movingLetters=[];
 
-    const w=words[Math.floor(Math.random()*words.length)];
+    let w=words[Math.floor(Math.random()*words.length)];
     currentWord=w.word;
     wordImageEl.src=w.img;
 
@@ -110,36 +108,57 @@ function newWord(){
     }
 
     letters.forEach(l=>{
-        const btn=document.createElement("div");
-        btn.className="letter";
-        btn.textContent=l;
-        btn.onclick=()=>clickLetter(l,btn);
-        lettersContainer.appendChild(btn);
+        let el=document.createElement("div");
+        el.className="letter";
+        el.innerText=l;
+
+        // random positie over scherm
+        el.style.left=Math.random()*(window.innerWidth-80)+"px";
+        el.style.top=Math.random()*(window.innerHeight-80)+"px";
+
+        el.onclick=()=>clickLetter(l,el);
+
+        lettersLayer.appendChild(el);
+
+        if(level>=2) movingLetters.push(el);
     });
 
-    if(level>=2){
-        moveLetters();
-    }
+    if(level>=2) moveLetters();
 }
 
-// LETTER KLIK
-function clickLetter(letter,btn){
+// letters bewegen
+function moveLetters(){
+    setInterval(()=>{
+        movingLetters.forEach(el=>{
+            let x=parseFloat(el.style.left);
+            let y=parseFloat(el.style.top);
+
+            x += (Math.random()*20-10);
+            y += (Math.random()*20-10);
+
+            el.style.left=x+"px";
+            el.style.top=y+"px";
+        });
+    },800);
+}
+
+// klik
+function clickLetter(letter,el){
     speakLetterNL(letter);
 
     if(letter===currentWord[collected.length]){
         collected+=letter;
-        btn.style.visibility="hidden";
+        el.remove();
         updateWordDisplay();
+
+        trex.classList.add("bite");
+        setTimeout(()=>trex.classList.remove("bite"),300);
+
+        correctSound?.play();
 
         if(collected===currentWord){
 
-            messageEl.textContent="Goed gedaan! 🎉";
-
-            trex.classList.add("jump");
-            setTimeout(()=>trex.classList.remove("jump"),500);
-
             createConfetti();
-            showStars();
 
             speak("Het woord is "+currentWord);
             setTimeout(()=>speak("Goed gedaan!"),1500);
@@ -149,68 +168,49 @@ function clickLetter(letter,btn){
             updateScore();
 
             setTimeout(()=>{
-                level = Math.min(level+1,2);
+                level=Math.min(level+1,2);
                 newWord();
             },3000);
         }
 
     } else {
         messageEl.textContent="Fout!";
+        wrongSound?.play();
         speak("Fout");
     }
 }
 
-// SCORE
+// score
 function updateScore(){
     scoreEl.textContent=`${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-// START
+// start
 function startGame(){
     updateScore();
     speak(`Welkom ${currentPlayer}. Klik de letters in de juiste volgorde.`);
     setTimeout(newWord,1500);
 }
 
-// DINO
+// dino volgt klik
 document.addEventListener("click",e=>{
     trex.style.left=e.clientX+"px";
     trex.style.top=e.clientY+"px";
 });
 
-// SWITCH
+// switch
 document.getElementById("switch-btn").onclick=()=>{
     localStorage.removeItem("currentPlayer");
     location.reload();
 };
 
-// CONFETTI
+// confetti
 function createConfetti(){
     for(let i=0;i<30;i++){
-        const c=document.createElement("div");
+        let c=document.createElement("div");
         c.className="confetti";
         c.style.left=Math.random()*100+"vw";
         document.body.appendChild(c);
         setTimeout(()=>c.remove(),2000);
     }
-}
-
-// STERREN
-function showStars(){
-    const s=document.createElement("div");
-    s.className="stars";
-    s.innerText="⭐⭐⭐";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),2000);
-}
-
-// BEWEGENDE LETTERS
-function moveLetters(){
-    moveInterval=setInterval(()=>{
-        document.querySelectorAll(".letter").forEach(el=>{
-            let x=Math.random()*10-5;
-            let y=Math.random()*10-5;
-            el.style.transform=`translate(${x}px,${y}px)`;
-        });
-    },800);
 }
