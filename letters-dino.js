@@ -263,56 +263,51 @@ function animateLetters(){
 
     requestAnimationFrame(animateLetters);
 }
-
-// klik
-function clickLetter(letter,btn){
+//klik
+function clickLetter(letter, btn) {
+    // 1️⃣ Altijd eerst de letter uitspreken
     speakLetterNL(letter);
 
+    // 2️⃣ Zet de T-Rex op de knop
     trex.style.left = btn.style.left;
     trex.style.top = btn.style.top;
 
-    if(letter === currentWord[collected.length]){
-
-        messageEl.textContent = "Goed!"; // 🔥
+    // 3️⃣ Controleer of de letter correct is
+    if (letter === currentWord[collected.length]) {
 
         collected += letter;
-        btn.style.visibility="hidden";
+        btn.style.visibility = "hidden";
         updateWordDisplay();
 
-        if(collected === currentWord){
-
-            messageEl.textContent = "Goed gedaan!"; // 🔥
-
+        if (collected === currentWord) {
+            // volledige woord correct
             correctSound.currentTime = 0;
-            setTimeout(()=> correctSound.play(), 150);
+            // speel geluid kort na uitspraak van letter
+            setTimeout(() => correctSound.play(), 150);
 
+            // spreek het volledige woord
             speak(currentWord);
 
-            setTimeout(()=>{
-                speak("Goed gedaan!");
-
+            setTimeout(() => {
+                // score bijwerken
                 profiles[currentPlayer].score += 10;
                 localStorage.setItem("profiles", JSON.stringify(profiles));
                 updateScore();
 
                 gameCount++;
-                setTimeout(newWord,1500);
-            },1000);
+                setTimeout(newWord, 1500);
+            }, 1000);
 
         } else {
-
+            // individuele letter correct
             correctSound.currentTime = 0;
-            correctSound.play();
+            setTimeout(() => correctSound.play(), 150);
         }
 
     } else {
-
-        messageEl.textContent = "Fout!"; // 🔥
-
+        // fout antwoord
         wrongSound.currentTime = 0;
-        setTimeout(()=> wrongSound.play(), 150);
-
-        speak("Fout");
+        setTimeout(() => wrongSound.play(), 150);
     }
 }
 
