@@ -265,50 +265,43 @@ function animateLetters(){
 }
 //klik
 function clickLetter(letter, btn) {
-    // 1️⃣ Altijd eerst de letter uitspreken
-    speakLetterNL(letter);
-
-    // 2️⃣ Zet de T-Rex op de knop
+    // Zet de T-Rex op de knop
     trex.style.left = btn.style.left;
     trex.style.top = btn.style.top;
 
-    // 3️⃣ Controleer of de letter correct is
-    if (letter === currentWord[collected.length]) {
-
-        collected += letter;
-        btn.style.visibility = "hidden";
-        updateWordDisplay();
-
-        if (collected === currentWord) {
-            // volledige woord correct
+    // Spreek de letter eerst
+    const utter = new SpeechSynthesisUtterance(letter);
+    utter.lang = "nl-NL"; // Nederlands
+    utter.onend = () => {
+        // Zodra de letter klaar is met spreken, speel het geluid
+        if (letter === currentWord[collected.length]) {
             correctSound.currentTime = 0;
-            // speel geluid kort na uitspraak van letter
-            setTimeout(() => correctSound.play(), 150);
+            correctSound.play();
 
-            // spreek het volledige woord
-            speak(currentWord);
+            collected += letter;
+            btn.style.visibility = "hidden";
+            updateWordDisplay();
 
-            setTimeout(() => {
-                // score bijwerken
-                profiles[currentPlayer].score += 10;
-                localStorage.setItem("profiles", JSON.stringify(profiles));
-                updateScore();
+            if (collected === currentWord) {
+                // volledig woord correct
+                speak(currentWord);
+                setTimeout(() => {
+                    profiles[currentPlayer].score += 10;
+                    localStorage.setItem("profiles", JSON.stringify(profiles));
+                    updateScore();
 
-                gameCount++;
-                setTimeout(newWord, 1500);
-            }, 1000);
+                    gameCount++;
+                    setTimeout(newWord, 1500);
+                }, 1000);
+            }
 
         } else {
-            // individuele letter correct
-            correctSound.currentTime = 0;
-            setTimeout(() => correctSound.play(), 150);
+            // fout
+            wrongSound.currentTime = 0;
+            wrongSound.play();
         }
-
-    } else {
-        // fout antwoord
-        wrongSound.currentTime = 0;
-        setTimeout(() => wrongSound.play(), 150);
-    }
+    };
+    speechSynthesis.speak(utter);
 }
 
 function updateScore(){
