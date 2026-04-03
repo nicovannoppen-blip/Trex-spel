@@ -16,11 +16,7 @@ const messageEl = document.getElementById("message");
 const wordImage = document.getElementById("word-image");
 
 // spelers
-let profiles = JSON.parse(localStorage.getItem("profiles")) || {
-    "Odin": { score: 0 },
-    "Niel": { score: 0 }
-};
-
+let profiles = JSON.parse(localStorage.getItem("profiles")) || { "Odin": {score:0}, "Niel": {score:0} };
 let currentPlayer = localStorage.getItem("currentPlayer");
 
 // selectie
@@ -79,18 +75,17 @@ function newWord(){
     const w = words[Math.floor(Math.random()*words.length)];
     currentWord = w.word;
     wordImage.src = w.img;
-
     updateWordDisplay();
 
     let letters = currentWord.split("");
-
     const alphabet="abcdefghijklmnopqrstuvwxyz";
+
     while(letters.length < currentWord.length+3){
         let l = alphabet[Math.floor(Math.random()*alphabet.length)];
         if(!letters.includes(l)) letters.push(l);
     }
 
-    if(gameCount !== 0){
+    if(gameCount!==0){
         let first = letters[0];
         let rest = letters.slice(1).sort(()=>Math.random()-0.5);
         letters = [first,...rest];
@@ -101,49 +96,48 @@ function newWord(){
         btn.className="letter";
         btn.innerText=l;
         btn.onclick=()=>clickLetter(l,btn);
+
+        // toegevoegde data voor animatie
+        btn.dx = (Math.random()*2+1)*(Math.random()<0.5?-1:1);
+        btn.dy = (Math.random()*2+1)*(Math.random()<0.5?-1:1);
+
         lettersContainer.appendChild(btn);
     });
 
     positionLetters();
-
-    if(gameCount>=1){
-        animateLetters();
-    }
+    animateLetters(); // vloeiende beweging
 }
 
-// 🔥 correcte positionering binnen container
+// correcte startpositie
 function positionLetters(){
     const rect = lettersContainer.getBoundingClientRect();
-
     document.querySelectorAll(".letter").forEach(el=>{
-        const x = Math.random()*(rect.width-50);
-        const y = Math.random()*(rect.height-50);
-
-        el.style.left = x+"px";
-        el.style.top = y+"px";
+        el.style.left = Math.random()*(rect.width-50)+"px";
+        el.style.top = Math.random()*(rect.height-50)+"px";
     });
 }
 
-// 🔥 beweging met grenzen
+// vloeiende animatie met botsing tegen randen
 function animateLetters(){
-    requestAnimationFrame(animateLetters);
-
     const rect = lettersContainer.getBoundingClientRect();
-
     document.querySelectorAll(".letter").forEach(el=>{
         let x = parseFloat(el.style.left);
         let y = parseFloat(el.style.top);
 
-        x += (Math.random()-0.5)*2;
-        y += (Math.random()-0.5)*2;
+        x += el.dx;
+        y += el.dy;
 
-        // grenzen respecteren
+        if(x <=0 || x >= rect.width-50) el.dx *= -1;
+        if(y <=0 || y >= rect.height-50) el.dy *= -1;
+
         x = Math.max(0, Math.min(rect.width-50, x));
         y = Math.max(0, Math.min(rect.height-50, y));
 
         el.style.left = x+"px";
         el.style.top = y+"px";
     });
+
+    requestAnimationFrame(animateLetters);
 }
 
 // klik
@@ -163,23 +157,18 @@ function clickLetter(letter,btn){
                 profiles[currentPlayer].score += 10;
                 localStorage.setItem("profiles", JSON.stringify(profiles));
                 updateScore();
-
                 gameCount++;
                 setTimeout(newWord,1500);
             },1000);
         }
 
-    } else {
-        speak("Fout");
-    }
+    } else speak("Fout");
 }
 
-// score
 function updateScore(){
     scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-// wissel speler
 function switchPlayer(){
     localStorage.removeItem("currentPlayer");
     location.reload();
