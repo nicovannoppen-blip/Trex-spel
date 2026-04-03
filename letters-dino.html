@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dino Letters 🦖</title>
+<title>🦖 Dino Letters</title>
 <link rel="stylesheet" href="letters-dino.css">
 </head>
 
@@ -11,37 +11,35 @@
 
 <div class="game-container">
 
+    <!-- PLAYER SELECT -->
     <div id="player-selection">
         <p>Wie speelt?</p>
         <button id="odin-btn">Odin</button>
         <button id="niel-btn">Niel</button>
     </div>
 
-    <div id="game" style="display:none;">
-        <h1>Dino Letters 🦖</h1>
+    <h1>Dino Letters 🦖</h1>
 
-        <img id="word-image">
+    <p>Bouw het woord:</p>
 
-        <p id="word"></p>
+    <!-- PICTOGRAM -->
+    <img id="word-image" src="" width="120">
 
-        <!-- letters over volledige pagina -->
-        <div id="letters-layer"></div>
+    <!-- WOORD -->
+    <p id="word"></p>
 
-        <p id="score"></p>
-        <p id="message"></p>
+    <!-- LETTERS -->
+    <div id="letters-container"></div>
 
-        <a href="index.html" class="button">⬅ Terug</a>
-        <button id="switch-btn" class="button">🔄 Wissel speler</button>
-    </div>
+    <p id="score"></p>
+    <p id="message"></p>
+
+    <a href="index.html" class="button">⬅ Terug</a>
+    <button onclick="switchPlayer()" class="button">🔄 Wissel speler</button>
 
 </div>
 
-<img id="trex" src="assets/trex1.png">
-
 <div id="leaves-container"></div>
-
-<audio id="correct-sound" src="sounds/correct.mp3"></audio>
-<audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
 
 <script src="letters-dino.js"></script>
 </body>
