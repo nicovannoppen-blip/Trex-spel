@@ -56,7 +56,7 @@ function speak(text){
 }
 
 function speakLetterNL(letter){
-    const phonetic = { m:"em" };
+    const phonetic = { m:"m" };
     let u = new SpeechSynthesisUtterance(phonetic[letter] || letter);
     u.lang="nl-NL";
     speechSynthesis.speak(u);
