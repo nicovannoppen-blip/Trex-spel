@@ -9,6 +9,9 @@ let currentWord = "";
 let collected = "";
 let gameCount = 0;
 
+// 🔥 snelheid per level (PAS HIER AAN)
+let speedPerLevel = [0, 0, 0.5, 1, 1.5];
+
 const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
 const scoreEl = document.getElementById("score");
@@ -16,7 +19,11 @@ const messageEl = document.getElementById("message");
 const wordImage = document.getElementById("word-image");
 
 // spelers
-let profiles = JSON.parse(localStorage.getItem("profiles")) || { "Odin": {score:0}, "Niel": {score:0} };
+let profiles = JSON.parse(localStorage.getItem("profiles")) || {
+    "Odin": { score: 0 },
+    "Niel": { score: 0 }
+};
+
 let currentPlayer = localStorage.getItem("currentPlayer");
 
 // selectie
@@ -55,7 +62,7 @@ function startGame(){
     setTimeout(newWord,2000);
 }
 
-// woord tonen
+// woord display
 function updateWordDisplay(){
     wordEl.innerHTML="";
     for(let i=0;i<currentWord.length;i++){
@@ -75,6 +82,7 @@ function newWord(){
     const w = words[Math.floor(Math.random()*words.length)];
     currentWord = w.word;
     wordImage.src = w.img;
+
     updateWordDisplay();
 
     let letters = currentWord.split("");
@@ -85,41 +93,63 @@ function newWord(){
         if(!letters.includes(l)) letters.push(l);
     }
 
-    if(gameCount!==0){
+    // 🔥 level logica
+    if(gameCount === 0){
+        // alles in juiste volgorde
+    }
+    else if(gameCount === 1){
+        let first = letters[0];
+        let rest = letters.slice(1).sort(()=>Math.random()-0.5);
+        letters = [first,...rest];
+    }
+    else {
         let first = letters[0];
         let rest = letters.slice(1).sort(()=>Math.random()-0.5);
         letters = [first,...rest];
     }
 
-    letters.forEach(l=>{
+    letters.forEach((l,index)=>{
         const btn=document.createElement("div");
         btn.className="letter";
         btn.innerText=l;
         btn.onclick=()=>clickLetter(l,btn);
 
-        // toegevoegde data voor animatie
-        btn.dx = (Math.random()*2+1)*(Math.random()<0.5?-1:1);
-        btn.dy = (Math.random()*2+1)*(Math.random()<0.5?-1:1);
+        // snelheid per level
+        let speed = speedPerLevel[Math.min(gameCount, speedPerLevel.length-1)];
+
+        // eerste letter blijft stil vanaf level 2
+        if(gameCount >= 1 && index === 0){
+            btn.dx = 0;
+            btn.dy = 0;
+        } else {
+            btn.dx = speed * (Math.random()<0.5?-1:1);
+            btn.dy = speed * (Math.random()<0.5?-1:1);
+        }
 
         lettersContainer.appendChild(btn);
     });
 
     positionLetters();
-    animateLetters(); // vloeiende beweging
+
+    if(gameCount >= 2){
+        animateLetters();
+    }
 }
 
-// correcte startpositie
+// positionering
 function positionLetters(){
     const rect = lettersContainer.getBoundingClientRect();
+
     document.querySelectorAll(".letter").forEach(el=>{
         el.style.left = Math.random()*(rect.width-50)+"px";
         el.style.top = Math.random()*(rect.height-50)+"px";
     });
 }
 
-// vloeiende animatie met botsing tegen randen
+// animatie
 function animateLetters(){
     const rect = lettersContainer.getBoundingClientRect();
+
     document.querySelectorAll(".letter").forEach(el=>{
         let x = parseFloat(el.style.left);
         let y = parseFloat(el.style.top);
@@ -129,9 +159,6 @@ function animateLetters(){
 
         if(x <=0 || x >= rect.width-50) el.dx *= -1;
         if(y <=0 || y >= rect.height-50) el.dy *= -1;
-
-        x = Math.max(0, Math.min(rect.width-50, x));
-        y = Math.max(0, Math.min(rect.height-50, y));
 
         el.style.left = x+"px";
         el.style.top = y+"px";
@@ -157,18 +184,23 @@ function clickLetter(letter,btn){
                 profiles[currentPlayer].score += 10;
                 localStorage.setItem("profiles", JSON.stringify(profiles));
                 updateScore();
+
                 gameCount++;
                 setTimeout(newWord,1500);
             },1000);
         }
 
-    } else speak("Fout");
+    } else {
+        speak("Fout");
+    }
 }
 
+// score
 function updateScore(){
     scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
+// wissel speler
 function switchPlayer(){
     localStorage.removeItem("currentPlayer");
     location.reload();
