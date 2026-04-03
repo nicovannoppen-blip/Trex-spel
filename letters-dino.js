@@ -11,7 +11,7 @@ let currentWord = "";
 let collected = "";
 let gameCount = 0;
 
-let speedPerLevel = [0, 0, 0.4, 0.8];
+let speedPerLevel = [0, 0, 0.3, 0.6];
 
 const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
