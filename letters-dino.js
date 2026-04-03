@@ -201,7 +201,8 @@ function clickLetter(letter,btn){
             speak(currentWord);
 
             setTimeout(()=>{
-                speak("Goed gedaan!");
+              correctSound?.play();  
+              speak("Goed gedaan!");
                 profiles[currentPlayer].score += 10;
                 localStorage.setItem("profiles", JSON.stringify(profiles));
                 updateScore();
@@ -212,6 +213,7 @@ function clickLetter(letter,btn){
         }
 
     } else {
+        wrongSound?.play();
         speak("Fout");
     }
 }
