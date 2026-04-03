@@ -64,6 +64,7 @@ function speakLetterNL(letter){
 
 // start
 function startGame(){
+    updateScore(); // 🔥 TOEVOEGEN
     speak(`Welkom ${currentPlayer}. Klik de letters in de juiste volgorde.`);
     setTimeout(newWord,2000);
 }
@@ -242,3 +243,4 @@ function switchPlayer(){
     localStorage.removeItem("currentPlayer");
     location.reload();
 }
+updateScore();
