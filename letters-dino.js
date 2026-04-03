@@ -11,6 +11,7 @@ let currentWord = "";
 let collected = "";
 let gameCount = 0;
 
+// snelheid per level
 let speedPerLevel = [0, 0, 0.1, 0.2, 0.2, 0.3,0.3,0.3,0.4,0.5];
 
 const wordEl = document.getElementById("word");
@@ -18,6 +19,7 @@ const lettersContainer = document.getElementById("letters-container");
 const scoreEl = document.getElementById("score");
 const messageEl = document.getElementById("message");
 const wordImage = document.getElementById("word-image");
+const trex = document.getElementById("trex");
 
 // spelers
 let profiles = JSON.parse(localStorage.getItem("profiles")) || {
@@ -63,7 +65,7 @@ function startGame(){
     setTimeout(newWord,2000);
 }
 
-// woord
+// woord display
 function updateWordDisplay(){
     wordEl.innerHTML="";
     for(let i=0;i<currentWord.length;i++){
@@ -78,6 +80,7 @@ function updateWordDisplay(){
 function newWord(){
     collected="";
     lettersContainer.innerHTML="";
+    lettersContainer.appendChild(trex); // dino terugzetten
     messageEl.textContent="";
 
     const w = words[Math.floor(Math.random()*words.length)];
@@ -126,45 +129,53 @@ function newWord(){
     }
 }
 
-// 🔥 PERFECTE POSITIONERING
+// positionering
 function positionLetters(){
     const width = lettersContainer.clientWidth;
     const height = lettersContainer.clientHeight;
 
     document.querySelectorAll(".letter").forEach(el=>{
-        let x = Math.random()*(width - LETTER_SIZE);
-        let y = Math.random()*(height - LETTER_SIZE);
-
-        el.style.left = x + "px";
-        el.style.top = y + "px";
+        el.style.left = Math.random()*(width-LETTER_SIZE)+"px";
+        el.style.top = Math.random()*(height-LETTER_SIZE)+"px";
     });
 }
 
-// 🔥 PERFECTE BEWEGING
+// animatie + botsing
 function animateLetters(){
     const width = lettersContainer.clientWidth;
     const height = lettersContainer.clientHeight;
+    const letters = document.querySelectorAll(".letter");
 
-    document.querySelectorAll(".letter").forEach(el=>{
+    letters.forEach(el=>{
         let x = parseFloat(el.style.left);
         let y = parseFloat(el.style.top);
 
         x += el.dx;
         y += el.dy;
 
-        // botsing
-        if(x <= 0 || x >= width - LETTER_SIZE){
+        if(x <=0 || x >= width-LETTER_SIZE){
             el.dx *= -1;
-            x = Math.max(0, Math.min(width - LETTER_SIZE, x));
         }
-
-        if(y <= 0 || y >= height - LETTER_SIZE){
+        if(y <=0 || y >= height-LETTER_SIZE){
             el.dy *= -1;
-            y = Math.max(0, Math.min(height - LETTER_SIZE, y));
         }
 
-        el.style.left = x + "px";
-        el.style.top = y + "px";
+        // botsing met andere letters
+        letters.forEach(other=>{
+            if(el !== other){
+                let dx = x - parseFloat(other.style.left);
+                let dy = y - parseFloat(other.style.top);
+                let dist = Math.sqrt(dx*dx + dy*dy);
+
+                if(dist < LETTER_SIZE){
+                    el.dx *= -1;
+                    el.dy *= -1;
+                }
+            }
+        });
+
+        el.style.left = x+"px";
+        el.style.top = y+"px";
     });
 
     requestAnimationFrame(animateLetters);
@@ -173,6 +184,10 @@ function animateLetters(){
 // klik
 function clickLetter(letter,btn){
     speakLetterNL(letter);
+
+    // 🦖 dino beweegt naar letter
+    trex.style.left = btn.style.left;
+    trex.style.top = btn.style.top;
 
     if(letter === currentWord[collected.length]){
         collected += letter;
