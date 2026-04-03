@@ -18,7 +18,6 @@ const words = [
   {word:"kalkoen", img:"assets/kalkoen.png"},
   {word:"muis", img:"assets/muis.png"},
   {word:"slak", img:"assets/slak.png"},
-  {word:"aardbei", img:"assets/aardbei.png"},
   {word:"cavia", img:"assets/cavia.png"},
   {word:"geit", img:"assets/geit.png"},
   {word:"kameel", img:"assets/kameel.png"},
@@ -91,7 +90,7 @@ let collected = "";
 let gameCount = 0;
 
 // snelheid per level
-let speedPerLevel = [0, 0, 0.1, 0.2, 0.2, 0.3,0.3,0.3,0.4,0.5];
+let speedPerLevel = [0, 0, 0, 0, 0, 0.1, 0.1,0.1,0.1,0.1,0.2,0.2,0.2,0.2, 0.2, 0.3,0.3,0.3,0.3,0.3,0.3,0.4,0.4,0.4,0.4,0.5];
 
 const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
