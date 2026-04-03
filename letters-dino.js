@@ -188,11 +188,15 @@ function animateLetters(){
 function clickLetter(letter,btn){
     speakLetterNL(letter);
 
-    // 🦖 dino beweegt naar letter
+    // 🦖 dino beweegt
     trex.style.left = btn.style.left;
     trex.style.top = btn.style.top;
 
     if(letter === currentWord[collected.length]){
+
+        correctSound.currentTime = 0;
+        correctSound.play();
+
         collected += letter;
         btn.style.visibility="hidden";
         updateWordDisplay();
@@ -201,8 +205,11 @@ function clickLetter(letter,btn){
             speak(currentWord);
 
             setTimeout(()=>{
-              correctSound?.play();  
-              speak("Goed gedaan!");
+                speak("Goed gedaan!");
+
+                correctSound.currentTime = 0;
+                correctSound.play();
+
                 profiles[currentPlayer].score += 10;
                 localStorage.setItem("profiles", JSON.stringify(profiles));
                 updateScore();
@@ -213,7 +220,10 @@ function clickLetter(letter,btn){
         }
 
     } else {
-        wrongSound?.play();
+
+        wrongSound.currentTime = 0;
+        wrongSound.play();
+
         speak("Fout");
     }
 }
