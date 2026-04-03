@@ -310,7 +310,7 @@ function clickLetter(letter,btn){
         messageEl.textContent = "Fout!"; // 🔥
 
         wrongSound.currentTime = 0;
-        wrongSound.play();
+        setTimeout(()=> wrongSound.play(), 150);
 
         speak("Fout");
     }
