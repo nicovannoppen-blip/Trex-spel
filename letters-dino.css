@@ -30,9 +30,12 @@ body {
 
 /* speelzone */
 #letters-container {
-    position:relative;
+    position:absolute;
+    top:180px;   /* ruimte voor titel + afbeelding */
+    left:0;
     width:100%;
-    height:150px;
+    bottom:80px; /* ruimte voor knoppen */
+
     overflow:hidden;
     border-radius:15px;
 }
