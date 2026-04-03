@@ -1,63 +1,62 @@
 body {
-    margin: 0;
-    font-family: Arial;
-    background: url('images/jungle-background.jpg') no-repeat center center fixed;
-    background-size: cover;
-    color: white;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-
-    overflow: hidden; /* ❗ geen scroll */
-}
-
-.game-container {
-    position: relative; /* ❗ BELANGRIJK */
-    background: rgba(180,180,180,0.5);
-    backdrop-filter: blur(10px);
-    padding: 40px;
-    border-radius: 25px;
-    text-align: center;
-    width: 90%;
-    max-width: 600px;
-    height: 80vh;
-    box-shadow: 0 0 30px rgba(0,0,0,0.5);
-
-    overflow: hidden; /* ❗ letters blijven binnen */
-}
-
-#word {
-    font-size: 2.5em;
-    margin: 20px 0;
-}
-
-#letters-container {
-    position: relative;
-    width: 100%;
-    height: 300px;
-}
-
-.letter {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: rgba(255,255,255,0.9);
-    color: black;
-    border-radius: 10px;
+    margin:0;
+    font-family:Arial;
+    background:url('images/jungle-background.jpg') no-repeat center center fixed;
+    background-size:cover;
+    color:white;
     display:flex;
     justify-content:center;
     align-items:center;
-    cursor:pointer;
-    font-size:20px;
+    height:100vh;
+    overflow:hidden;
 }
 
+.game-container {
+    position:relative;
+    background:rgba(180,180,180,0.5);
+    backdrop-filter:blur(10px);
+    padding:40px;
+    border-radius:25px;
+    text-align:center;
+    width:90%;
+    max-width:600px;
+    height:80vh;
+    overflow:hidden;
+}
+
+#word {
+    font-size:2.5em;
+    margin:20px 0;
+}
+
+/* 🔥 speelzone */
+#letters-container {
+    position:relative;
+    width:100%;
+    height:300px;
+    border-radius:15px;
+}
+
+/* 🔥 letters */
+.letter {
+    position:absolute;
+    width:50px;
+    height:50px;
+    background:white;
+    color:black;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:22px;
+    cursor:pointer;
+}
+
+/* knoppen */
 .button {
-    display:inline-block;
     margin-top:20px;
     padding:10px 20px;
-    background: rgba(0,0,0,0.6);
+    background:rgba(0,0,0,0.6);
     border-radius:10px;
     color:white;
     text-decoration:none;
@@ -65,22 +64,8 @@ body {
 
 /* bladeren */
 #leaves-container {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
-.leaf {
-    position: absolute;
-    width: 30px;
-    height: 30px;
-    background: url('images/leaf.png') no-repeat center;
-    background-size: contain;
-    animation: fall linear;
-}
-
-@keyframes fall {
-    from { transform: translateY(0); }
-    to { transform: translateY(100vh); }
+    position:fixed;
+    width:100%;
+    height:100%;
+    pointer-events:none;
 }
