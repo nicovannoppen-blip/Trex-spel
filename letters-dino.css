@@ -20,6 +20,7 @@ body {
     width:95%;
     max-width:1000px;
     height:80vh;
+    position:relative;
 }
 
 #word {
@@ -27,7 +28,7 @@ body {
     margin:20px 0;
 }
 
-/* 🔥 SPEELZONE */
+/* speelzone */
 #letters-container {
     position:relative;
     width:100%;
@@ -36,7 +37,7 @@ body {
     border-radius:15px;
 }
 
-/* 🔥 LETTER */
+/* letters */
 .letter {
     position:absolute;
     width:50px;
@@ -49,9 +50,25 @@ body {
     align-items:center;
     font-size:22px;
     cursor:pointer;
+    z-index:2;
+}
+
+/* dino */
+#trex {
+    position:absolute;
+    width:60px;
+    left:0;
+    top:0;
+    z-index:1;
+    transition:0.3s linear;
 }
 
 /* knoppen */
+.buttons {
+    position:relative;
+    z-index:10; /* 🔥 FIX */
+}
+
 .button {
     margin-top:20px;
     padding:10px 20px;
@@ -59,4 +76,5 @@ body {
     border-radius:10px;
     color:white;
     text-decoration:none;
+    border:none;
 }
