@@ -194,21 +194,21 @@ function clickLetter(letter,btn){
 
     if(letter === currentWord[collected.length]){
 
-        correctSound.currentTime = 0;
-        correctSound.play();
-
         collected += letter;
         btn.style.visibility="hidden";
         updateWordDisplay();
 
+        // 🔥 check of dit de LAATSTE letter is
         if(collected === currentWord){
+
+            // 👉 slechts 1x geluid
+            correctSound.currentTime = 0;
+            correctSound.play();
+
             speak(currentWord);
 
             setTimeout(()=>{
                 speak("Goed gedaan!");
-
-                correctSound.currentTime = 0;
-                correctSound.play();
 
                 profiles[currentPlayer].score += 10;
                 localStorage.setItem("profiles", JSON.stringify(profiles));
@@ -217,6 +217,12 @@ function clickLetter(letter,btn){
                 gameCount++;
                 setTimeout(newWord,1500);
             },1000);
+
+        } else {
+
+            // 👉 normale correcte letter
+            correctSound.currentTime = 0;
+            correctSound.play();
         }
 
     } else {
