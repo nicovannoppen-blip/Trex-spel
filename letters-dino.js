@@ -9,8 +9,7 @@ let currentWord = "";
 let collected = "";
 let gameCount = 0;
 
-// 🔥 snelheid per level (PAS HIER AAN)
-let speedPerLevel = [0, 0, 0.5, 1, 1.5];
+let speedPerLevel = [0, 0, 0.5, 1];
 
 const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
@@ -93,16 +92,7 @@ function newWord(){
         if(!letters.includes(l)) letters.push(l);
     }
 
-    // 🔥 level logica
-    if(gameCount === 0){
-        // alles in juiste volgorde
-    }
-    else if(gameCount === 1){
-        let first = letters[0];
-        let rest = letters.slice(1).sort(()=>Math.random()-0.5);
-        letters = [first,...rest];
-    }
-    else {
+    if(gameCount >= 1){
         let first = letters[0];
         let rest = letters.slice(1).sort(()=>Math.random()-0.5);
         letters = [first,...rest];
@@ -114,10 +104,8 @@ function newWord(){
         btn.innerText=l;
         btn.onclick=()=>clickLetter(l,btn);
 
-        // snelheid per level
         let speed = speedPerLevel[Math.min(gameCount, speedPerLevel.length-1)];
 
-        // eerste letter blijft stil vanaf level 2
         if(gameCount >= 1 && index === 0){
             btn.dx = 0;
             btn.dy = 0;
@@ -136,19 +124,21 @@ function newWord(){
     }
 }
 
-// positionering
+// 🔥 CORRECTE POSITIONERING (FIX)
 function positionLetters(){
-    const rect = lettersContainer.getBoundingClientRect();
+    const width = lettersContainer.clientWidth;
+    const height = lettersContainer.clientHeight;
 
     document.querySelectorAll(".letter").forEach(el=>{
-        el.style.left = Math.random()*(rect.width-50)+"px";
-        el.style.top = Math.random()*(rect.height-50)+"px";
+        el.style.left = Math.random()*(width-50)+"px";
+        el.style.top = Math.random()*(height-50)+"px";
     });
 }
 
-// animatie
+// 🔥 CORRECTE ANIMATIE (FIX)
 function animateLetters(){
-    const rect = lettersContainer.getBoundingClientRect();
+    const width = lettersContainer.clientWidth;
+    const height = lettersContainer.clientHeight;
 
     document.querySelectorAll(".letter").forEach(el=>{
         let x = parseFloat(el.style.left);
@@ -157,8 +147,8 @@ function animateLetters(){
         x += el.dx;
         y += el.dy;
 
-        if(x <=0 || x >= rect.width-50) el.dx *= -1;
-        if(y <=0 || y >= rect.height-50) el.dy *= -1;
+        if(x <=0 || x >= width-50) el.dx *= -1;
+        if(y <=0 || y >= height-50) el.dy *= -1;
 
         el.style.left = x+"px";
         el.style.top = y+"px";
@@ -195,12 +185,10 @@ function clickLetter(letter,btn){
     }
 }
 
-// score
 function updateScore(){
     scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-// wissel speler
 function switchPlayer(){
     localStorage.removeItem("currentPlayer");
     location.reload();
