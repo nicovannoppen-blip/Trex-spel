@@ -1,4 +1,3 @@
-// woorden + pictogrammen
 const words = [
   {word:"boom", img:"assets/boom.png"},
   {word:"vis", img:"assets/vis.png"},
@@ -40,7 +39,7 @@ if(currentPlayer){
     startGame();
 }
 
-// -------- spraak --------
+// spraak
 function speak(text){
     let u = new SpeechSynthesisUtterance(text);
     u.lang="nl-NL";
@@ -54,12 +53,13 @@ function speakLetterNL(letter){
     speechSynthesis.speak(u);
 }
 
-// -------- spel --------
+// start
 function startGame(){
     speak(`Welkom ${currentPlayer}. Klik de letters in de juiste volgorde.`);
     setTimeout(newWord,2000);
 }
 
+// woord tonen
 function updateWordDisplay(){
     wordEl.innerHTML="";
     for(let i=0;i<currentWord.length;i++){
@@ -70,6 +70,7 @@ function updateWordDisplay(){
     }
 }
 
+// nieuw woord
 function newWord(){
     collected="";
     lettersContainer.innerHTML="";
@@ -83,18 +84,13 @@ function newWord(){
 
     let letters = currentWord.split("");
 
-    // 3 foute letters
     const alphabet="abcdefghijklmnopqrstuvwxyz";
     while(letters.length < currentWord.length+3){
         let l = alphabet[Math.floor(Math.random()*alphabet.length)];
         if(!letters.includes(l)) letters.push(l);
     }
 
-    // level gedrag
-    if(gameCount===0){
-        // juiste volgorde
-    } else {
-        // eerste letter juist, rest random
+    if(gameCount !== 0){
         let first = letters[0];
         let rest = letters.slice(1).sort(()=>Math.random()-0.5);
         letters = [first,...rest];
@@ -111,10 +107,46 @@ function newWord(){
     positionLetters();
 
     if(gameCount>=1){
-        moveLetters();
+        animateLetters();
     }
 }
 
+// 🔥 correcte positionering binnen container
+function positionLetters(){
+    const rect = lettersContainer.getBoundingClientRect();
+
+    document.querySelectorAll(".letter").forEach(el=>{
+        const x = Math.random()*(rect.width-50);
+        const y = Math.random()*(rect.height-50);
+
+        el.style.left = x+"px";
+        el.style.top = y+"px";
+    });
+}
+
+// 🔥 beweging met grenzen
+function animateLetters(){
+    requestAnimationFrame(animateLetters);
+
+    const rect = lettersContainer.getBoundingClientRect();
+
+    document.querySelectorAll(".letter").forEach(el=>{
+        let x = parseFloat(el.style.left);
+        let y = parseFloat(el.style.top);
+
+        x += (Math.random()-0.5)*2;
+        y += (Math.random()-0.5)*2;
+
+        // grenzen respecteren
+        x = Math.max(0, Math.min(rect.width-50, x));
+        y = Math.max(0, Math.min(rect.height-50, y));
+
+        el.style.left = x+"px";
+        el.style.top = y+"px";
+    });
+}
+
+// klik
 function clickLetter(letter,btn){
     speakLetterNL(letter);
 
@@ -142,54 +174,10 @@ function clickLetter(letter,btn){
     }
 }
 
+// score
 function updateScore(){
     scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
-
-// -------- positie binnen container --------
-function positionLetters(){
-    const container = document.querySelector(".game-container");
-    const rect = container.getBoundingClientRect();
-
-    document.querySelectorAll(".letter").forEach(el=>{
-        const x = Math.random()*(rect.width-60);
-        const y = Math.random()*(rect.height-200);
-
-        el.style.left = x+"px";
-        el.style.top = (y+120)+"px";
-    });
-}
-
-// -------- bewegen --------
-function moveLetters(){
-    const container = document.querySelector(".game-container");
-    const rect = container.getBoundingClientRect();
-
-    document.querySelectorAll(".letter").forEach(el=>{
-        let x=parseFloat(el.style.left);
-        let y=parseFloat(el.style.top);
-
-        x += (Math.random()-0.5)*2;
-        y += (Math.random()-0.5)*2;
-
-        x = Math.max(0, Math.min(rect.width-60,x));
-        y = Math.max(100, Math.min(rect.height-60,y));
-
-        el.style.left=x+"px";
-        el.style.top=y+"px";
-    });
-
-    requestAnimationFrame(moveLetters);
-}
-
-// bladeren
-setInterval(()=>{
-    const leaf=document.createElement("div");
-    leaf.className="leaf";
-    leaf.style.left=Math.random()*window.innerWidth+"px";
-    document.getElementById("leaves-container").appendChild(leaf);
-    setTimeout(()=>leaf.remove(),5000);
-},500);
 
 // wissel speler
 function switchPlayer(){
