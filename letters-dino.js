@@ -16,6 +16,7 @@ const messageEl = document.getElementById("message");
 const scoreEl = document.getElementById("score");
 const wordImageEl = document.getElementById("word-image");
 const trex = document.getElementById("trex");
+let level = 1;
 
 // ---------- PROFIEL ----------
 let profiles = JSON.parse(localStorage.getItem("profiles")) || {
@@ -113,7 +114,67 @@ function newWord(){
         lettersContainer.appendChild(btn);
     });
 }
+function newWord(){
+    collected="";
+    messageEl.textContent="";
+    lettersContainer.innerHTML="";
 
+    const w = words[Math.floor(Math.random()*words.length)];
+    currentWord = w.word;
+
+    wordImageEl.src = w.img;
+
+    updateWordDisplay();
+
+    let letters = currentWord.split("");
+
+    const alphabet="abcdefghijklmnopqrstuvwxyz";
+    let extra=[];
+
+    while(extra.length<3){
+        let l=alphabet[Math.floor(Math.random()*alphabet.length)];
+        if(!letters.includes(l)) extra.push(l);
+    }
+
+    // LEVEL LOGICA
+    if(level === 1){
+        letters = [...letters, ...extra]; // juiste volgorde
+    } else {
+        let first = letters[0];
+        let rest = letters.slice(1);
+
+        rest = rest.concat(extra);
+        rest.sort(()=>Math.random()-0.5);
+
+        letters = [first, ...rest];
+    }
+
+    letters.forEach(l=>{
+        const btn=document.createElement("div");
+        btn.className="letter";
+        btn.textContent=l;
+
+        btn.onclick=()=>clickLetter(l,btn);
+
+        lettersContainer.appendChild(btn);
+    });
+
+    if(level >= 2){
+        moveLetters();
+    }
+}
+function moveLetters(){
+    const letters = document.querySelectorAll(".letter");
+
+    letters.forEach(el=>{
+        let x = Math.random()*10 - 5;
+        let y = Math.random()*10 - 5;
+
+        el.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    setTimeout(moveLetters, 800);
+}
 // ---------- CLICK ----------
 function clickLetter(letter,btn){
     speakLetterNL(letter);
@@ -124,28 +185,38 @@ function clickLetter(letter,btn){
         updateWordDisplay();
 
         if(collected===currentWord){
-            messageEl.textContent="Goed gedaan!";
-        
-            // Eerst het woord zeggen
+
+            messageEl.textContent="Goed gedaan! 🎉";
+
+            // 🦖 dino spring
+            trex.classList.add("jump");
+            setTimeout(()=>trex.classList.remove("jump"),600);
+
+            // 🎉 confetti
+            createConfetti();
+
+            // ⭐ sterren
+            showStars();
+
+            // 🔊 woord + felicitatie
             speak("Het woord is " + currentWord);
-        
-            // Daarna feliciteren (met kleine vertraging)
-            setTimeout(()=>{
-                speak("Goed gedaan!");
-            }, 1200);
-        
+            setTimeout(()=>speak("Goed gedaan!"),1500);
+
             profiles[currentPlayer].score+=10;
             localStorage.setItem("profiles",JSON.stringify(profiles));
             updateScore();
-        
-            setTimeout(newWord, 2500); // iets langer wachten
+
+            // level omhoog na paar woorden
+            setTimeout(()=>{
+                if(Math.random() < 0.3) level++;
+                newWord();
+            },3000);
         }
     } else {
         messageEl.textContent="Fout!";
         speak("Fout");
     }
 }
-
 // ---------- SCORE ----------
 function updateScore(){
     scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
@@ -180,3 +251,23 @@ setInterval(()=>{
     leavesContainer.appendChild(leaf);
     leaf.addEventListener("animationend",()=>leaf.remove());
 },500);
+//--------------confetti--------------
+function createConfetti(){
+    for(let i=0;i<30;i++){
+        const c=document.createElement("div");
+        c.className="confetti";
+        c.style.left=Math.random()*100+"vw";
+        document.body.appendChild(c);
+
+        setTimeout(()=>c.remove(),2000);
+    }
+//-------------sterren-------------
+    function showStars(){
+    const stars=document.createElement("div");
+    stars.innerText="⭐⭐⭐";
+    stars.className="stars";
+    document.body.appendChild(stars);
+
+    setTimeout(()=>stars.remove(),2000);
+}
+}
