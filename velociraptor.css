@@ -1,6 +1,35 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background: url('images/jungle-background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Zelfde container als home */
+.game-container {
+    background: rgba(180, 180, 180, 0.5);
+    backdrop-filter: blur(10px);
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    width: 90%;
+    max-width: 900px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.5);
+}
+
+/* Titel */
+h1 {
+    font-size: 2.5em;
+}
+
+/*body {
+    margin: 0;
+    font-family: Arial, sans-serif;
     background: #eef;
 }
 
@@ -13,6 +42,7 @@ body {
     background: linear-gradient(to top, #cfc 0%, #9f6 100%);
     overflow: hidden;
 }
+*/
 
 #top-bar {
     position: absolute;
