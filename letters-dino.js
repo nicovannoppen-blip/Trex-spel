@@ -1,3 +1,5 @@
+const LETTER_SIZE = 50;
+
 const words = [
   {word:"boom", img:"assets/boom.png"},
   {word:"vis", img:"assets/vis.png"},
@@ -9,7 +11,7 @@ let currentWord = "";
 let collected = "";
 let gameCount = 0;
 
-let speedPerLevel = [0, 0, 0.5, 1];
+let speedPerLevel = [0, 0, 0.4, 0.8];
 
 const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
@@ -61,7 +63,7 @@ function startGame(){
     setTimeout(newWord,2000);
 }
 
-// woord display
+// woord
 function updateWordDisplay(){
     wordEl.innerHTML="";
     for(let i=0;i<currentWord.length;i++){
@@ -124,18 +126,21 @@ function newWord(){
     }
 }
 
-// 🔥 CORRECTE POSITIONERING (FIX)
+// 🔥 PERFECTE POSITIONERING
 function positionLetters(){
     const width = lettersContainer.clientWidth;
     const height = lettersContainer.clientHeight;
 
     document.querySelectorAll(".letter").forEach(el=>{
-        el.style.left = Math.random()*(width-50)+"px";
-        el.style.top = Math.random()*(height-50)+"px";
+        let x = Math.random()*(width - LETTER_SIZE);
+        let y = Math.random()*(height - LETTER_SIZE);
+
+        el.style.left = x + "px";
+        el.style.top = y + "px";
     });
 }
 
-// 🔥 CORRECTE ANIMATIE (FIX)
+// 🔥 PERFECTE BEWEGING
 function animateLetters(){
     const width = lettersContainer.clientWidth;
     const height = lettersContainer.clientHeight;
@@ -147,11 +152,19 @@ function animateLetters(){
         x += el.dx;
         y += el.dy;
 
-        if(x <=0 || x >= width-50) el.dx *= -1;
-        if(y <=0 || y >= height-50) el.dy *= -1;
+        // botsing
+        if(x <= 0 || x >= width - LETTER_SIZE){
+            el.dx *= -1;
+            x = Math.max(0, Math.min(width - LETTER_SIZE, x));
+        }
 
-        el.style.left = x+"px";
-        el.style.top = y+"px";
+        if(y <= 0 || y >= height - LETTER_SIZE){
+            el.dy *= -1;
+            y = Math.max(0, Math.min(height - LETTER_SIZE, y));
+        }
+
+        el.style.left = x + "px";
+        el.style.top = y + "px";
     });
 
     requestAnimationFrame(animateLetters);
