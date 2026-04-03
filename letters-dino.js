@@ -1,6 +1,6 @@
 const LETTER_SIZE = 50;
 
-cconst words = [
+const words = [
   {word:"boom", img:"assets/boom.png"},
   {word:"vis", img:"assets/vis.png"},
   {word:"kat", img:"assets/kat.png"},
