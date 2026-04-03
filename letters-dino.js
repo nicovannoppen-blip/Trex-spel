@@ -284,7 +284,7 @@ function clickLetter(letter,btn){
             messageEl.textContent = "Goed gedaan!"; // 🔥
 
             correctSound.currentTime = 0;
-            correctSound.play();
+            setTimeout(()=> correctSound.play(), 150);
 
             speak(currentWord);
 
