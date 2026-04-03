@@ -20,7 +20,10 @@ body {
     width:90%;
     max-width:600px;
     z-index:10;
+    position: relative;   /* 👈 SUPER BELANGRIJK */
+    overflow: hidden;     /* 👈 voorkomt scroll */
 }
+
 
 /* woord */
 #word {
