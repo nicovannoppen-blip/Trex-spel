@@ -1,4 +1,3 @@
-// ---------- DATA ----------
 const words = [
     {word:"kat", img:"assets/kat.png"},
     {word:"vis", img:"assets/vis.png"},
@@ -6,12 +5,12 @@ const words = [
     {word:"hond", img:"assets/hond.png"}
 ];
 
-let currentWord = "";
-let collected = "";
-let level = 1;
-let moveInterval = null;
+let currentWord="";
+let collected="";
+let level=1;
+let moveInterval=null;
 
-// ---------- ELEMENTEN ----------
+// ELEMENTEN
 const wordEl = document.getElementById("word");
 const lettersContainer = document.getElementById("letters-container");
 const messageEl = document.getElementById("message");
@@ -19,49 +18,52 @@ const scoreEl = document.getElementById("score");
 const wordImageEl = document.getElementById("word-image");
 const trex = document.getElementById("trex");
 
-// ---------- PROFIEL ----------
+// PROFIEL
 let profiles = JSON.parse(localStorage.getItem("profiles")) || {
-    "Odin": { score: 0 },
-    "Niel": { score: 0 }
+    "Odin": { score:0 },
+    "Niel": { score:0 }
 };
 
 let currentPlayer = localStorage.getItem("currentPlayer");
 
-// ---------- SPELER ----------
-document.getElementById("odin-btn")?.addEventListener("click",()=>selectPlayer("Odin"));
-document.getElementById("niel-btn")?.addEventListener("click",()=>selectPlayer("Niel"));
+// PLAYER SELECT
+document.getElementById("odin-btn").onclick = ()=>selectPlayer("Odin");
+document.getElementById("niel-btn").onclick = ()=>selectPlayer("Niel");
 
 function selectPlayer(name){
-    currentPlayer = name;
-    localStorage.setItem("currentPlayer", name);
+    currentPlayer=name;
+    localStorage.setItem("currentPlayer",name);
+
     document.getElementById("player-selection").style.display="none";
+    document.getElementById("game").style.display="block";
+
     startGame();
 }
 
 if(currentPlayer){
     document.getElementById("player-selection").style.display="none";
+    document.getElementById("game").style.display="block";
     startGame();
 }
 
-// ---------- SPRAAK ----------
+// SPRAAK
 function speak(text){
-    const u = new SpeechSynthesisUtterance(text);
+    const u=new SpeechSynthesisUtterance(text);
     u.lang="nl-NL";
     speechSynthesis.cancel();
     speechSynthesis.speak(u);
 }
 
 function speakLetterNL(letter){
-    const map = {"m":"em"};
-    const u = new SpeechSynthesisUtterance(map[letter]||letter);
+    const map={"m":"em"};
+    const u=new SpeechSynthesisUtterance(map[letter]||letter);
     u.lang="nl-NL";
     speechSynthesis.speak(u);
 }
 
-// ---------- WOORD ----------
+// WOORD WEERGAVE
 function updateWordDisplay(){
-    wordEl.innerHTML = "";
-
+    wordEl.innerHTML="";
     for(let i=0;i<currentWord.length;i++){
         const span=document.createElement("span");
         span.textContent = i<collected.length ? currentWord[i] : "_";
@@ -70,26 +72,25 @@ function updateWordDisplay(){
     }
 }
 
-// ---------- NIEUW WOORD ----------
+// NIEUW WOORD
 function newWord(){
 
     if(moveInterval){
         clearInterval(moveInterval);
-        moveInterval = null;
+        moveInterval=null;
     }
 
     collected="";
     messageEl.textContent="";
     lettersContainer.innerHTML="";
 
-    const w = words[Math.floor(Math.random()*words.length)];
-    currentWord = w.word;
-
-    wordImageEl.src = w.img;
+    const w=words[Math.floor(Math.random()*words.length)];
+    currentWord=w.word;
+    wordImageEl.src=w.img;
 
     updateWordDisplay();
 
-    let letters = currentWord.split("");
+    let letters=currentWord.split("");
 
     const alphabet="abcdefghijklmnopqrstuvwxyz";
     let extra=[];
@@ -99,13 +100,13 @@ function newWord(){
         if(!letters.includes(l)) extra.push(l);
     }
 
-    if(level === 1){
-        letters = [...letters, ...extra];
+    if(level===1){
+        letters=[...letters,...extra];
     } else {
-        let first = letters[0];
-        let rest = letters.slice(1).concat(extra);
+        let first=letters[0];
+        let rest=letters.slice(1).concat(extra);
         rest.sort(()=>Math.random()-0.5);
-        letters = [first, ...rest];
+        letters=[first,...rest];
     }
 
     letters.forEach(l=>{
@@ -116,12 +117,12 @@ function newWord(){
         lettersContainer.appendChild(btn);
     });
 
-    if(level >= 2){
+    if(level>=2){
         moveLetters();
     }
 }
 
-// ---------- LETTER KLIK ----------
+// LETTER KLIK
 function clickLetter(letter,btn){
     speakLetterNL(letter);
 
@@ -135,12 +136,12 @@ function clickLetter(letter,btn){
             messageEl.textContent="Goed gedaan! 🎉";
 
             trex.classList.add("jump");
-            setTimeout(()=>trex.classList.remove("jump"),600);
+            setTimeout(()=>trex.classList.remove("jump"),500);
 
             createConfetti();
             showStars();
 
-            speak("Het woord is " + currentWord);
+            speak("Het woord is "+currentWord);
             setTimeout(()=>speak("Goed gedaan!"),1500);
 
             profiles[currentPlayer].score+=10;
@@ -152,37 +153,38 @@ function clickLetter(letter,btn){
                 newWord();
             },3000);
         }
+
     } else {
         messageEl.textContent="Fout!";
         speak("Fout");
     }
 }
 
-// ---------- SCORE ----------
+// SCORE
 function updateScore(){
-    scoreEl.textContent = `${currentPlayer} score: ${profiles[currentPlayer].score}`;
+    scoreEl.textContent=`${currentPlayer} score: ${profiles[currentPlayer].score}`;
 }
 
-// ---------- START ----------
+// START
 function startGame(){
     updateScore();
     speak(`Welkom ${currentPlayer}. Klik de letters in de juiste volgorde.`);
     setTimeout(newWord,1500);
 }
 
-// ---------- DINO ----------
+// DINO
 document.addEventListener("click",e=>{
     trex.style.left=e.clientX+"px";
     trex.style.top=e.clientY+"px";
 });
 
-// ---------- SWITCH ----------
-document.getElementById("switch-btn").onclick = ()=>{
+// SWITCH
+document.getElementById("switch-btn").onclick=()=>{
     localStorage.removeItem("currentPlayer");
     location.reload();
 };
 
-// ---------- CONFETTI ----------
+// CONFETTI
 function createConfetti(){
     for(let i=0;i<30;i++){
         const c=document.createElement("div");
@@ -193,7 +195,7 @@ function createConfetti(){
     }
 }
 
-// ---------- STERREN ----------
+// STERREN
 function showStars(){
     const s=document.createElement("div");
     s.className="stars";
@@ -202,9 +204,9 @@ function showStars(){
     setTimeout(()=>s.remove(),2000);
 }
 
-// ---------- BEWEGING ----------
+// BEWEGENDE LETTERS
 function moveLetters(){
-    moveInterval = setInterval(()=>{
+    moveInterval=setInterval(()=>{
         document.querySelectorAll(".letter").forEach(el=>{
             let x=Math.random()*10-5;
             let y=Math.random()*10-5;
