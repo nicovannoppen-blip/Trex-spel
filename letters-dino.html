@@ -11,14 +11,12 @@
 
 <div class="game-container">
 
-    <!-- PLAYER -->
     <div id="player-selection">
         <p>Wie speelt?</p>
         <button id="odin-btn">Odin</button>
         <button id="niel-btn">Niel</button>
     </div>
 
-    <!-- GAME -->
     <div id="game" style="display:none;">
         <h1>Dino Letters 🦖</h1>
 
@@ -26,7 +24,8 @@
 
         <p id="word"></p>
 
-        <div id="letters-container"></div>
+        <!-- letters over volledige pagina -->
+        <div id="letters-layer"></div>
 
         <p id="score"></p>
         <p id="message"></p>
@@ -41,7 +40,9 @@
 
 <div id="leaves-container"></div>
 
-<script src="letters-dino.js"></script>
+<audio id="correct-sound" src="sounds/correct.mp3"></audio>
+<audio id="wrong-sound" src="sounds/wrong.mp3"></audio>
 
+<script src="letters-dino.js"></script>
 </body>
 </html>
