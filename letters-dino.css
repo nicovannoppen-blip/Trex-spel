@@ -33,8 +33,11 @@ body {
     position:relative;
     width:100%;
     height:300px;
+    overflow:hidden;
+    border-radius:15px;
 }
 
+/* 🔥 BELANGRIJK */
 .letter {
     position:absolute;
     width:50px;
