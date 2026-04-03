@@ -52,8 +52,8 @@ function spawnEggs() {
     for(let i=0;i<10;i++){
         const egg = document.createElement('div');
         egg.className = 'egg';
-        egg.style.left = Math.random() * 770 + 'px';
-        egg.style.top = Math.random() * 540 + 'px';
+        egg.style.left = Math.random() * (800 - 30) + 'px';
+        egg.style.top = Math.random() * (600 - 40 - 80) + 40 + 'px'; // 40px top-bar + marge
         gameWorld.appendChild(egg);
         eggs.push(egg);
     }
