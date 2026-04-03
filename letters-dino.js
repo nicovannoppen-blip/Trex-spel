@@ -21,6 +21,9 @@ const messageEl = document.getElementById("message");
 const wordImage = document.getElementById("word-image");
 const trex = document.getElementById("trex");
 
+const correctSound = document.getElementById("correct-sound");
+const wrongSound = document.getElementById("wrong-sound");
+
 // spelers
 let profiles = JSON.parse(localStorage.getItem("profiles")) || {
     "Odin": { score: 0 },
