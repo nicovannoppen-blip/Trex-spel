@@ -189,20 +189,21 @@ function animateLetters(){
 function clickLetter(letter,btn){
     speakLetterNL(letter);
 
-    // 🦖 dino beweegt
     trex.style.left = btn.style.left;
     trex.style.top = btn.style.top;
 
     if(letter === currentWord[collected.length]){
 
+        messageEl.textContent = "Goed!"; // 🔥
+
         collected += letter;
         btn.style.visibility="hidden";
         updateWordDisplay();
 
-        // 🔥 check of dit de LAATSTE letter is
         if(collected === currentWord){
 
-            // 👉 slechts 1x geluid
+            messageEl.textContent = "Goed gedaan!"; // 🔥
+
             correctSound.currentTime = 0;
             correctSound.play();
 
@@ -221,12 +222,13 @@ function clickLetter(letter,btn){
 
         } else {
 
-            // 👉 normale correcte letter
             correctSound.currentTime = 0;
             correctSound.play();
         }
 
     } else {
+
+        messageEl.textContent = "Fout!"; // 🔥
 
         wrongSound.currentTime = 0;
         wrongSound.play();
