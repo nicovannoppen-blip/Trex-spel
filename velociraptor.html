@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 <html lang="nl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Velociraptor Eierspel</title>
-<link rel="stylesheet" href="velociraptor.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Velociraptor</title>
+
+    <link rel="stylesheet" href="velociraptor.css">
 </head>
 <body>
-<div class="game-container">
-    <div id="top-bar">
-        <span id="target-eggs">0</span> eieren
-        <span id="timer">02:00</span>
+
+<div id="game">
+
+    <div id="hud">
+        <div>
+            Te verzamelen:
+            <span id="target-eggs">0</span>
+        </div>
+
+        <div id="timer">
+            02:00
+        </div>
+
+        <div>
+            Score:
+            <span id="score">0</span>
+        </div>
     </div>
-    <div id="game-world">
-        <div id="velociraptor"></div>
+
+    <div id="world">
+
+        <!-- Platforms, ladders en eieren worden via JavaScript toegevoegd -->
+
+        <div id="player"></div>
+
     </div>
-    <div id="score-board">
-        Score: <span id="score">0</span>
-    </div>
+
 </div>
 
 <script src="velociraptor.js"></script>
+
 </body>
 </html>
