@@ -1,85 +1,184 @@
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #eef;
+/* ===========================
+   ALGEMEEN
+=========================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
-.game-container {
-    position: relative;
-    width: 800px;
-    height: 600px;
-    margin: 20px auto;
-    border: 3px solid #333;
-    background: linear-gradient(to top, #cfc 0%, #9f6 100%);
-    overflow: hidden;
+body{
+    background:#dbeeff;
+    font-family:Arial, Helvetica, sans-serif;
 }
 
-#top-bar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background: #222;
-    color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 10px;
-    font-size: 18px;
-    z-index: 100;
+#game{
+    width:900px;
+    height:700px;
+    margin:20px auto;
+    border:4px solid #333;
+    overflow:hidden;
+    position:relative;
+    background:#9ed36a;
 }
 
-#score-board {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-    background: #222;
-    color: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    z-index: 100;
+/* ===========================
+   HUD
+=========================== */
+
+#hud{
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:50px;
+
+    background:#222;
+    color:white;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    padding:0 20px;
+
+    font-size:24px;
+    font-weight:bold;
+
+    z-index:1000;
 }
 
-#game-world {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    padding-top: 40px;
-    padding-bottom: 40px;
-    overflow: hidden;
+#timer{
+    color:#ffe066;
 }
 
-#velociraptor {
-    position: absolute;
-    width: 50px;
-    height: 50px;
-    background: url('assets/velociraptor.png') no-repeat center/contain;
-    bottom: 0;
-    left: 50px;
-    z-index: 10;
+/* ===========================
+   SPEELWERELD
+=========================== */
+
+#world{
+    position:absolute;
+    left:0;
+    top:50px;
+
+    width:900px;
+    height:650px;
+
+    overflow:hidden;
+
+    background:
+        linear-gradient(
+            to top,
+            #6aa84f 0%,
+            #8fd66b 100%
+        );
 }
 
-.egg {
-    position: absolute;
-    width: 30px;
-    height: 40px;
-    background: url('assets/egg.png') no-repeat center/contain;
-    z-index: 5;
+/* ===========================
+   DINO
+=========================== */
+
+#player{
+
+    position:absolute;
+
+    width:56px;
+    height:56px;
+
+    background:url("assets/velociraptor.png");
+
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
+
+    z-index:200;
 }
 
-.platform {
-    position: absolute;
-    height: 20px;
-    background: #444;
+/* ===========================
+   PLATFORMEN
+=========================== */
+
+.platform{
+
+    position:absolute;
+
+    height:18px;
+
+    background:#654321;
+
+    border-top:4px solid #8b5a2b;
+    border-bottom:3px solid #3d220f;
+
+    z-index:50;
 }
 
-.ladder {
-    position: absolute;
-    width: 20px;
-    background: #a52a2a;
+/* ===========================
+   LADDERS
+=========================== */
+
+.ladder{
+
+    position:absolute;
+
+    width:32px;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #8b5a2b 0px,
+            #8b5a2b 8px,
+            #d2b48c 8px,
+            #d2b48c 14px
+        );
+
+    border-left:4px solid #5a3512;
+    border-right:4px solid #5a3512;
+
+    z-index:40;
+}
+
+/* ===========================
+   EIEREN
+=========================== */
+
+.egg{
+
+    position:absolute;
+
+    width:28px;
+    height:36px;
+
+    background:url("assets/egg.png");
+
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
+
+    z-index:150;
+}
+
+/* ===========================
+   EFFECT
+=========================== */
+
+.collect{
+
+    animation:pop .25s ease;
+}
+
+@keyframes pop{
+
+    0%{
+        transform:scale(1);
+    }
+
+    50%{
+        transform:scale(1.4);
+    }
+
+    100%{
+        transform:scale(0);
+    }
+
 }
